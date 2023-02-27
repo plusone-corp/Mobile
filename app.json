@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Mobile",
-    "slug": "Mobile",
+    "slug": "plusone-corp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -25,6 +25,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "aca3a50b-1164-4f6a-b23b-a1cf27bcec60"
+      }
+    },
+    "owner": "cutiecat6778"
   }
 }
