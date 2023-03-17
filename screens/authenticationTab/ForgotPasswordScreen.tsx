@@ -1,14 +1,14 @@
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import { Text, View } from '../../components/components/themed';
-import { RootStackScreenProps } from '../../types';
+import { AuthStackScreenProps } from '../../types';
 
-export default function LogInScreen({ navigation }: RootStackScreenProps<'LogIn'>) {
+export default function ForgotPasswordScreen({ navigation }: AuthStackScreenProps<'ForgotPassword'>) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>This is login screen.</Text>
-      <TouchableOpacity onPress={() => navigation.replace('Root')} style={styles.link}>
-        <Text style={styles.linkText}>Go to home screen!</Text>
+      <Text style={styles.title}>This is forgot password screen.</Text>
+      <TouchableOpacity onPress={() => navigation.replace('LogIn')} style={styles.link}>
+        <Text style={styles.linkText}>Go to login screen!</Text>
       </TouchableOpacity>
     </View>
   );

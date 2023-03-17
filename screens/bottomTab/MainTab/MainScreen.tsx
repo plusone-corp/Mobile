@@ -2,8 +2,16 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import { Text, View } from '../../../components/components/themed';
 import { MainTabScreenProps } from '../../../types';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function MainScreenMainTabScreen({ navigation }: MainTabScreenProps<'MainScreen'>) {
+
+  function logOut() {
+    AsyncStorage.setItem("loggedIn", "0").then(() => {
+      navigation.replace("DiscoveryScreen")
+    })
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>This is the Main screen of Main tab</Text>
@@ -14,6 +22,9 @@ export default function MainScreenMainTabScreen({ navigation }: MainTabScreenPro
         screen: "Profile"
       })} style={styles.link}>
         <Text style={styles.linkText}>Go to profile tab!</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => logOut()} style={styles.link}>
+        <Text style={styles.linkText}>LogOut</Text>
       </TouchableOpacity>
     </View>
   );

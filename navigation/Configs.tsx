@@ -22,8 +22,16 @@ const linking: LinkingOptions<RootStackParamList> = {
           },
         },
       },
+      Authentication: {
+        screens: {
+          Register: "Register",
+          LogIn: "LogIn",
+          ForgotPassword: "ForgotPassword"
+        }
+      },
       Setting: 'modal',
       NotFound: '*',
+      Splash: ""
     },
   },
 };

@@ -11,20 +11,39 @@ declare global {
   }
 }
 
+/*
+  Root Stack
+*/
+
 export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
   Setting: undefined;
   NotFound: undefined;
-  LogIn: undefined;
+  Authentication: undefined;
+  Splash: undefined
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
   NativeStackScreenProps<RootStackParamList, Screen, any>;
 
+/* 
+  Main Tab
+*/
+
 export type RootTabParamList = {
   Main: NavigatorScreenParams<MainTabScreenList> | undefined;
   Profile: NavigatorScreenParams<ProfileTabScreenList> | undefined;
 };
+
+export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
+  CompositeScreenProps<
+    BottomTabScreenProps<RootTabParamList, Screen>,
+    NativeStackScreenProps<RootStackParamList>
+  >;
+
+/*
+  Sub main tab
+*/
 
 export type MainTabScreenList = {
   MainScreen: undefined;
@@ -53,8 +72,18 @@ export type ProfileTabScreenProps<Screen extends keyof ProfileTabScreenList> =
     >
   >;
 
-export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
+/*
+  Authentication Tab
+*/
+
+export type AuthStackParamList = {
+  LogIn: undefined;
+  Register: undefined;
+  ForgotPassword: undefined
+};
+
+export type AuthStackScreenProps<Screen extends keyof AuthStackParamList> =
   CompositeScreenProps<
-    BottomTabScreenProps<RootTabParamList, Screen>,
+  NativeStackScreenProps<AuthStackParamList, Screen>,
     NativeStackScreenProps<RootStackParamList>
   >;
