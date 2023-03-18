@@ -1,33 +1,30 @@
 {
   "expo": {
-    "name": "Mobile",
+    "name": "PlusOne",
     "slug": "plusone-corp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "scheme": "myapp",
+    "scheme": "PlusOne",
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.plusonecorp.mobile"
+      "bundleIdentifier": "com.plusonecorp.app"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.plusonecorp.mobile"
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
+      "package": "com.plusonecorp.app"
     },
     "extra": {
       "eas": {
