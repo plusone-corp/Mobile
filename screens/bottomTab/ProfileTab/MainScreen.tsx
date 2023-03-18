@@ -1,9 +1,9 @@
 import { StyleSheet } from 'react-native';
 
 import { Text, View } from '../../../components/components/themed';
-import { ProfileTabScreenProps } from '../../../types';
+import { ProfileStackScreenProps } from '../../../types';
 
-export default function MainScreenProfileTabScreen({ navigation }: ProfileTabScreenProps<'MainScreen'>) {
+export default function MainScreenProfileTabScreen({ navigation }: ProfileStackScreenProps<'MainScreen'>) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>This is the Main screen of Profile tab</Text>

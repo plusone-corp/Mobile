@@ -31,8 +31,8 @@ export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
 */
 
 export type RootTabParamList = {
-  Main: NavigatorScreenParams<MainTabScreenList> | undefined;
-  Profile: NavigatorScreenParams<ProfileTabScreenList> | undefined;
+  Main: NavigatorScreenParams<MainStackScreenList> | undefined;
+  Profile: NavigatorScreenParams<ProfileStackScreenList> | undefined;
 };
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
@@ -45,27 +45,27 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
   Sub main tab
 */
 
-export type MainTabScreenList = {
+export type MainStackScreenList = {
   MainScreen: undefined;
   DiscoveryScreen: undefined;
 };
 
-export type ProfileTabScreenList = {
+export type ProfileStackScreenList = {
   MainScreen: undefined;
 };
 
-export type MainTabScreenProps<Screen extends keyof MainTabScreenList> =
+export type MainStackScreenProps<Screen extends keyof MainStackScreenList> =
   CompositeScreenProps<
-    NativeStackScreenProps<MainTabScreenList, Screen>,
+    NativeStackScreenProps<MainStackScreenList, Screen>,
     CompositeScreenProps<
       BottomTabScreenProps<RootTabParamList>,
       NativeStackScreenProps<RootStackParamList>
     >
   >;
 
-export type ProfileTabScreenProps<Screen extends keyof ProfileTabScreenList> =
+export type ProfileStackScreenProps<Screen extends keyof ProfileStackScreenList> =
   CompositeScreenProps<
-    NativeStackScreenProps<ProfileTabScreenList, Screen>,
+    NativeStackScreenProps<ProfileStackScreenList, Screen>,
     CompositeScreenProps<
       BottomTabScreenProps<RootTabParamList>,
       NativeStackScreenProps<RootStackParamList>

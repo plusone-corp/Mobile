@@ -15,6 +15,7 @@ import SettingModal from "../screens/root/SettingModal";
 import AuthStackNavigator from "./Authentication/Authentication";
 import Splash from "../components/components/splash";
 import { LogIn } from "../types/forms";
+import { AuthContext } from "../constants/AuthContext";
 export default function Navigation({
   colorScheme,
 }: {
@@ -31,8 +32,6 @@ export default function Navigation({
 }
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
-
-export const AuthContext = React.createContext<any>(null);
 
 function RootNavigator() {
   const [state, dispatch] = useReducer(
@@ -67,14 +66,14 @@ function RootNavigator() {
 
   useEffect(() => {
     const bootstrapAsync = async () => {
-      let userToken;
+      let userToken: string | null;
 
       try {
         userToken = await SecureStore.getItemAsync("userToken");
         console.log(userToken)
       } catch (e) {
         console.log(e)
-        userToken = "randomtoken";
+        userToken = null;
       }
 
       dispatch({
@@ -89,11 +88,13 @@ function RootNavigator() {
   const authContext = useMemo(
     () => ({
       signIn: async (data: LogIn) => {
+        // Call the api and then recieve a generated token from the server
         console.log(data)
         dispatch({ type: "SIGN_IN", token: "randomtoken2" });
       },
       signOut: () => dispatch({ type: "SIGN_OUT" }),
       signUp: async (data: any) => {
+        // Call the api and then recieve a generated token from the server
         dispatch({ type: "SIGN_IN", token: "randomtoken3" });
       },
     }),
@@ -130,7 +131,6 @@ function RootNavigator() {
             />
           ))
         }
-        
       </Stack.Navigator>
     </AuthContext.Provider>
   );

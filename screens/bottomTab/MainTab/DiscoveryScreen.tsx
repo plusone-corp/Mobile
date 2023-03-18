@@ -1,9 +1,9 @@
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import { Text, View } from '../../../components/components/themed';
-import { MainTabScreenProps } from '../../../types';
+import { MainStackScreenProps } from '../../../types';
 
-export default function DiscoveryScreenMainTabScreen({ navigation }: MainTabScreenProps<'DiscoveryScreen'>) {
+export default function DiscoveryScreenMainTabScreen({ navigation }: MainStackScreenProps<'DiscoveryScreen'>) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>This is the Discovery screen of Main tab</Text>

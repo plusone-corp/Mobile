@@ -1,9 +1,8 @@
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Text, View } from '../../components/components/themed';
 import { AuthStackScreenProps } from '../../types';
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useContext } from 'react';
-import { AuthContext } from '../../navigation';
+import { AuthContext } from '../../constants/AuthContext';
 
 export default function LogInScreen({ navigation }: AuthStackScreenProps<'LogIn'>) {
 
@@ -18,7 +17,7 @@ export default function LogInScreen({ navigation }: AuthStackScreenProps<'LogIn'
       <TouchableOpacity onPress={() => navigation.replace('ForgotPassword')} style={styles.link}>
         <Text style={styles.linkText}>Go to forgot password screen!</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => signIn({ username: "Thinh", password: "Nguyen" })} style={styles.link}>
+      <TouchableOpacity onPress={() => signIn({ username: "admin", password: "admin" })} style={styles.link}>
         <Text style={styles.linkText}>LogIn</Text>
       </TouchableOpacity>
     </View>

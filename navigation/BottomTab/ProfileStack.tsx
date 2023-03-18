@@ -1,8 +1,8 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import MainScreenProfileTabScreen from "../../screens/bottomTab/ProfileTab/MainScreen";
-import { ProfileTabScreenList } from "../../types";
+import { ProfileStackScreenList } from "../../types";
 
-const Stack = createNativeStackNavigator<ProfileTabScreenList>();
+const Stack = createNativeStackNavigator<ProfileStackScreenList>();
 
 export default function ProfileTabStackNavigator() {
   return (
