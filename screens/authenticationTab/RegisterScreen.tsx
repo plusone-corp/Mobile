@@ -7,7 +7,7 @@ export default function RegisterScreen({ navigation }: AuthStackScreenProps<'Reg
   return (
     <View style={styles.container}>
       <Text style={styles.title}>This is register screen.</Text>
-      <TouchableOpacity onPress={() => navigation.replace('LogIn')} style={styles.link}>
+      <TouchableOpacity onPress={() => navigation.canGoBack() ? navigation.goBack() : navigation.push("LogIn")} style={styles.link}>
         <Text style={styles.linkText}>Go to login screen!</Text>
       </TouchableOpacity>
     </View>

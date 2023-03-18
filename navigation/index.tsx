@@ -103,7 +103,11 @@ function RootNavigator() {
 
   return (
     <AuthContext.Provider value={authContext}>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
         {
           state.isLoading ? (
             <Stack.Screen name="Splash" component={Splash}/>
@@ -119,7 +123,7 @@ function RootNavigator() {
                 component={NotFoundScreen}
                 options={{ title: "Oops!" }}
               />
-              <Stack.Group screenOptions={{ presentation: "modal" }}>
+              <Stack.Group screenOptions={{ presentation: "modal", headerShown: true }}>
                 <Stack.Screen name="Setting" component={SettingModal} />
               </Stack.Group>
             </>

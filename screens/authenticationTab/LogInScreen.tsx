@@ -11,10 +11,10 @@ export default function LogInScreen({ navigation }: AuthStackScreenProps<'LogIn'
   return (
     <View style={styles.container}>
       <Text style={styles.title}>This is login screen.</Text>
-      <TouchableOpacity onPress={() => navigation.replace('Register')} style={styles.link}>
+      <TouchableOpacity onPress={() => navigation.push('Register')} style={styles.link}>
         <Text style={styles.linkText}>Go to register screen!</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.replace('ForgotPassword')} style={styles.link}>
+      <TouchableOpacity onPress={() => navigation.push('ForgotPassword')} style={styles.link}>
         <Text style={styles.linkText}>Go to forgot password screen!</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => signIn({ username: "admin", password: "admin" })} style={styles.link}>

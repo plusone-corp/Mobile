@@ -12,7 +12,7 @@ export default function MainScreenMainTabScreen({ navigation }: MainStackScreenP
   return (
     <View style={styles.container}>
       <Text style={styles.title}>This is the Main screen of Main tab</Text>
-      <TouchableOpacity onPress={() => navigation.replace("DiscoveryScreen")} style={styles.link}>
+      <TouchableOpacity onPress={() => navigation.push("DiscoveryScreen")} style={styles.link}>
         <Text style={styles.linkText}>Go to discovery screen!</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate("Root", {

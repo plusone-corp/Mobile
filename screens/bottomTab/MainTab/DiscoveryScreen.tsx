@@ -4,10 +4,11 @@ import { Text, View } from '../../../components/components/themed';
 import { MainStackScreenProps } from '../../../types';
 
 export default function DiscoveryScreenMainTabScreen({ navigation }: MainStackScreenProps<'DiscoveryScreen'>) {
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>This is the Discovery screen of Main tab</Text>
-      <TouchableOpacity onPress={() => navigation.replace('MainScreen')} style={styles.link}>
+      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.link}>
         <Text style={styles.linkText}>Go to main screen!</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate("Root", {
