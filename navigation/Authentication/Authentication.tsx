@@ -9,6 +9,9 @@ const Stack = createNativeStackNavigator<AuthStackParamList>();
 export default function AuthStackNavigator() {
     return <Stack.Navigator
         initialRouteName="LogIn"
+        screenOptions={{
+            headerShown: false
+        }}
     >
         <Stack.Screen
             name="LogIn"

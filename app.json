@@ -2,14 +2,13 @@
   "expo": {
     "name": "PlusOne",
     "slug": "plusone-corp",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "resizeMode": "contain"
     },
     "scheme": "PlusOne",
     "assetBundlePatterns": [

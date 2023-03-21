@@ -16,6 +16,8 @@ import AuthStackNavigator from "./Authentication/Authentication";
 import Splash from "../components/components/splash";
 import { LogIn } from "../types/forms";
 import { AuthContext } from "../constants/AuthContext";
+import * as SplashScreen from "expo-splash-screen";
+
 export default function Navigation({
   colorScheme,
 }: {
@@ -64,22 +66,28 @@ function RootNavigator() {
     }
   );
 
+  const DEF_DELAY = 1000;
+
+  function sleep(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms || DEF_DELAY));
+  }
   useEffect(() => {
     const bootstrapAsync = async () => {
-      let userToken: string | null;
+      let userToken: string | null = null;
 
       try {
         userToken = await SecureStore.getItemAsync("userToken");
-        console.log(userToken)
+        await sleep(2000);
+        console.log(userToken);
       } catch (e) {
-        console.log(e)
+        console.log(e);
         userToken = null;
+      } finally {
+        dispatch({
+          type: "RESTORE_TOKEN",
+          token: userToken,
+        });
       }
-
-      dispatch({
-        type: "RESTORE_TOKEN",
-        token: userToken,
-      });
     };
 
     bootstrapAsync();
@@ -89,7 +97,7 @@ function RootNavigator() {
     () => ({
       signIn: async (data: LogIn) => {
         // Call the api and then recieve a generated token from the server
-        console.log(data)
+        console.log(data);
         dispatch({ type: "SIGN_IN", token: "randomtoken2" });
       },
       signOut: () => dispatch({ type: "SIGN_OUT" }),
@@ -108,33 +116,33 @@ function RootNavigator() {
           headerShown: false,
         }}
       >
-        {
-          state.isLoading ? (
-            <Stack.Screen name="Splash" component={Splash}/>
-          ) : (state.userToken != null ? (
-            <>
-              <Stack.Screen
-                name="Root"
-                component={BottomTabNavigator}
-                options={{ header: () => null }}
-              />
-              <Stack.Screen
-                name="NotFound"
-                component={NotFoundScreen}
-                options={{ title: "Oops!" }}
-              />
-              <Stack.Group screenOptions={{ presentation: "modal", headerShown: true }}>
-                <Stack.Screen name="Setting" component={SettingModal} />
-              </Stack.Group>
-            </>
-          ) : (
+        {state.isLoading ? (
+          <Stack.Screen name="Splash" component={Splash} />
+        ) : state.userToken != null ? (
+          <>
             <Stack.Screen
-              name="Authentication"
-              component={AuthStackNavigator}
+              name="Root"
+              component={BottomTabNavigator}
               options={{ header: () => null }}
             />
-          ))
-        }
+            <Stack.Screen
+              name="NotFound"
+              component={NotFoundScreen}
+              options={{ title: "Oops!" }}
+            />
+            <Stack.Group
+              screenOptions={{ presentation: "modal", headerShown: true }}
+            >
+              <Stack.Screen name="Setting" component={SettingModal} />
+            </Stack.Group>
+          </>
+        ) : (
+          <Stack.Screen
+            name="Authentication"
+            component={AuthStackNavigator}
+            options={{ header: () => null }}
+          />
+        )}
       </Stack.Navigator>
     </AuthContext.Provider>
   );
