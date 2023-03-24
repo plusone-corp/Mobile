@@ -6,6 +6,7 @@ import {
   StatusBar,
   KeyboardAvoidingView,
   ScrollView,
+  Image,
 } from "react-native";
 import { Feather, AntDesign } from "@expo/vector-icons";
 import { Text, View } from "../../components/components/themed";
@@ -23,8 +24,11 @@ export default function LogInScreen({
       <ScrollView style={styles.scroll}>
         <KeyboardAvoidingView style={styles.contain} behavior="padding">
           <StatusBar barStyle="light-content" backgroundColor="#000000" />
-          <Text style={styles.title}>Plus One Corp</Text>
 
+          <Image
+            source={require("../../assets/splash.png")}
+            style={styles.image}
+          />
           <View style={styles.login_filed}>
             <TextInput
               style={styles.input}
@@ -65,7 +69,6 @@ export default function LogInScreen({
               <Text style={styles.buttonText}>Login</Text>
             </TouchableOpacity>
           </View>
-
           <View style={styles.LogInForms}>
             <Text style={styles.textLogIn}>
               Log In with Facebook{" "}
@@ -99,16 +102,16 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "auto",
   },
-  title: {
-    fontSize: 35,
-    fontWeight: "bold",
-    color: "#fff",
-    marginTop: 90,
+  image: {
+    marginTop: 30,
+    width: 200,
+    height: 200,
+    resizeMode: "cover",
   },
   login_filed: {
     width: "70%",
     height: "auto",
-    marginTop: 50,
+    marginTop: -30,
     padding: 10,
     alignItems: "flex-end",
     justifyContent: "center",
@@ -170,11 +173,14 @@ const styles = StyleSheet.create({
   textLogIn: {
     width: "70%",
     fontWeight: "bold",
-    fontSize: 20,
+    textAlign: "center",
+    fontSize: 19,
     paddingHorizontal: 30,
     paddingVertical: 10,
-    color: "#000",
-    backgroundColor: "#fff",
+    color: "#eee",
+    backgroundColor: "transparent",
     borderRadius: 25,
+    borderWidth: 2,
+    borderColor: "#fff",
   },
 });
