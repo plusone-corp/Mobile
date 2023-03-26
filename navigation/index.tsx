@@ -97,6 +97,14 @@ function RootNavigator() {
     () => ({
       signIn: async (data: LogIn) => {
         // Call the api and then recieve a generated token from the server
+        /*
+          const token = fetch(server, {
+            header: {
+              "Authentication": "Bearer TOKEN"
+            }
+          })
+          SecureStore.save(token)
+        */
         console.log(data);
         dispatch({ type: "SIGN_IN", token: "randomtoken2" });
       },
