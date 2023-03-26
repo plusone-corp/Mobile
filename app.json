@@ -1,0 +1,35 @@
+{
+  "expo": {
+    "name": "PlusOne",
+    "slug": "plusone-corp",
+    "version": "0.0.1",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain"
+    },
+    "scheme": "PlusOne",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.plusonecorp.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.plusonecorp.app"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "aca3a50b-1164-4f6a-b23b-a1cf27bcec60"
+      }
+    },
+    "owner": "cutiecat6778"
+  }
+}
