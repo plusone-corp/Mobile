@@ -96,22 +96,51 @@ function RootNavigator() {
   const authContext = useMemo(
     () => ({
       signIn: async (data: LogIn) => {
-        // Call the api and then recieve a generated token from the server
-        /*
-          const token = fetch(server, {
-            header: {
-              "Authentication": "Bearer TOKEN"
-            }
-          })
-          SecureStore.save(token)
-        */
-        console.log(data);
-        dispatch({ type: "SIGN_IN", token: "randomtoken2" });
+        try {
+          const response = await fetch("https://api.txzje.xyz/auth/register", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          });
+
+          if (!response.ok) {
+            throw new Error("Invalid credentials");
+          }
+
+          const token = await response.json();
+
+          await SecureStore.setItemAsync("token", token);
+
+          dispatch({ type: "SIGN_IN", token });
+        } catch (error) {
+          console.error(error);
+        }
       },
       signOut: () => dispatch({ type: "SIGN_OUT" }),
       signUp: async (data: any) => {
-        // Call the api and then recieve a generated token from the server
-        dispatch({ type: "SIGN_IN", token: "randomtoken3" });
+        try {
+          const response = await fetch("https://api.txzje.xyz/auth/logout", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to create user");
+          }
+
+          const token = await response.json();
+
+          await SecureStore.setItemAsync("token", token);
+
+          dispatch({ type: "SIGN_IN", token });
+        } catch (error) {
+          console.error(error);
+        }
       },
     }),
     []

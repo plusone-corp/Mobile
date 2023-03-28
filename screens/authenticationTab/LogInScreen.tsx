@@ -57,7 +57,6 @@ export default function LogInScreen({
               value={password}
               onChangeText={setPassword}
             />
-
             <View style={styles.fix}>
               <TouchableOpacity
                 onPress={() => navigation.push("ForgotPassword")}
