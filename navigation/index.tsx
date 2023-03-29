@@ -42,56 +42,48 @@ function RootNavigator() {
         case "RESTORE_TOKEN":
           return {
             ...prevState,
-            userToken: action.token,
+            token: action.token,
             isLoading: false,
           };
         case "SIGN_IN":
           return {
             ...prevState,
-            isSignout: false,
-            userToken: action.token,
+            token: action.token,
+            isLoading: false,
           };
         case "SIGN_OUT":
           return {
             ...prevState,
             isSignout: true,
-            userToken: action.token,
+            token: action.token,
           };
         case "SIGN_UP":
           return {
             ...prevState,
             isSignout: true,
-            userToken: null,
-          }
+            token: null,
+          };
       }
     },
     {
       isLoading: true,
       isSignout: false,
-      userToken: null,
+      token: null,
     }
   );
 
-  const DEF_DELAY = 1000;
-
-  function sleep(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms || DEF_DELAY));
-  }
   useEffect(() => {
     const bootstrapAsync = async () => {
-      let userToken: string | null = null;
+      let token: string | null = null;
 
       try {
-        userToken = await SecureStore.getItemAsync("userToken");
-        await sleep(2000);
-        console.log(userToken);
+        token = await SecureStore.getItemAsync("token");
       } catch (e) {
-        console.log(e);
-        userToken = null;
+        token = null;
       } finally {
         dispatch({
           type: "RESTORE_TOKEN",
-          token: userToken,
+          token: token,
         });
       }
     };
@@ -115,11 +107,14 @@ function RootNavigator() {
             throw new Error("Invalid credentials");
           }
 
-          const token = await response.json();
+          const res = await response.json();
 
-          await SecureStore.setItemAsync("token", token.token);
+          await SecureStore.setItemAsync("token", res.token);
 
-          dispatch({ type: "SIGN_IN", token });
+          dispatch({
+            type: "SIGN_IN",
+            token: res.token,
+          });
         } catch (error) {
           console.error(error);
         }
@@ -128,19 +123,17 @@ function RootNavigator() {
         try {
           const response = await fetch("https://api.txzje.xyz/auth/logout", {
             method: "GET",
-            headers: {
+            headers: new Headers({
               "Content-Type": "application/json",
-              "Authentication": `Bearer ${state.token}`
-            },
+              Authorization: `Bearer ${state.token}`,
+            }),
           });
 
-          if (!response.ok) {
-            throw new Error("Failed to logout");
-          }
-          
+          const res = await response.json();
+
           await SecureStore.setItemAsync("token", "");
 
-          dispatch({ type: "SIGN_OUT" })
+          dispatch({ type: "SIGN_OUT" });
         } catch (error) {
           console.error(error);
         }
@@ -161,7 +154,7 @@ function RootNavigator() {
       >
         {state.isLoading ? (
           <Stack.Screen name="Splash" component={Splash} />
-        ) : state.userToken != null ? (
+        ) : state.token ? (
           <>
             <Stack.Screen
               name="Root"
