@@ -57,6 +57,12 @@ function RootNavigator() {
             isSignout: true,
             userToken: action.token,
           };
+        case "SIGN_UP":
+          return {
+            ...prevState,
+            isSignout: true,
+            userToken: null,
+          }
       }
     },
     {
@@ -97,7 +103,7 @@ function RootNavigator() {
     () => ({
       signIn: async (data: LogIn) => {
         try {
-          const response = await fetch("https://api.txzje.xyz/auth/register", {
+          const response = await fetch("https://api.txzje.xyz/auth/login", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -111,7 +117,7 @@ function RootNavigator() {
 
           const token = await response.json();
 
-          await SecureStore.setItemAsync("token", token);
+          await SecureStore.setItemAsync("token", token.token);
 
           dispatch({ type: "SIGN_IN", token });
         } catch (error) {
@@ -122,11 +128,11 @@ function RootNavigator() {
       signUp: async (data: any) => {
         try {
           const response = await fetch("https://api.txzje.xyz/auth/logout", {
-            method: "POST",
+            method: "GET",
             headers: {
               "Content-Type": "application/json",
+              "Authentication": `Bearer ${data.token}`
             },
-            body: JSON.stringify(data),
           });
 
           if (!response.ok) {
@@ -137,7 +143,7 @@ function RootNavigator() {
 
           await SecureStore.setItemAsync("token", token);
 
-          dispatch({ type: "SIGN_IN", token });
+          dispatch({ type: "SIGN_UP" });
         } catch (error) {
           console.error(error);
         }
