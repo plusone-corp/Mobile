@@ -137,7 +137,7 @@ function RootNavigator() {
           if (!response.ok) {
             throw new Error("Failed to logout");
           }
-          
+
           await SecureStore.setItemAsync("token", "");
 
           dispatch({ type: "SIGN_OUT" })
