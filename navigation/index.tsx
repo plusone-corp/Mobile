@@ -139,7 +139,7 @@ function RootNavigator() {
           const token = await response.json();
           
           if (token.status === 202) {
-            navigate("Login")
+            navigate("LogIn")
           } else {
             // Error
           }
