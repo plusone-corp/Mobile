@@ -124,29 +124,29 @@ function RootNavigator() {
           console.error(error);
         }
       },
-      signOut: () => dispatch({ type: "SIGN_OUT" }),
-      signUp: async (data: any) => {
+      signOut: async () => {
         try {
           const response = await fetch("https://api.txzje.xyz/auth/logout", {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
-              "Authentication": `Bearer ${data.token}`
+              "Authentication": `Bearer ${state.token}`
             },
           });
 
           if (!response.ok) {
-            throw new Error("Failed to create user");
+            throw new Error("Failed to logout");
           }
+          
+          await SecureStore.setItemAsync("token", "");
 
-          const token = await response.json();
-
-          await SecureStore.setItemAsync("token", token);
-
-          dispatch({ type: "SIGN_UP" });
+          dispatch({ type: "SIGN_OUT" })
         } catch (error) {
           console.error(error);
         }
+      },
+      signUp: async (data: any) => {
+        // Register
       },
     }),
     []
