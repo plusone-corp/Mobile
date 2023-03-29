@@ -129,7 +129,9 @@ function RootNavigator() {
             }),
           });
 
-          const res = await response.json();
+          if (!response.ok) {
+            throw new Error("Failed to logout");
+          }
 
           await SecureStore.setItemAsync("token", "");
 
