@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   textLogIn: {
-    width: "70%",
+    width: "85%",
     fontWeight: "bold",
     textAlign: "center",
     fontSize: 19,

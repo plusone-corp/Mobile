@@ -91,6 +91,7 @@ function RootNavigator() {
     bootstrapAsync();
   }, []);
 
+
   const authContext = useMemo(
     () => ({
       signIn: async (data: LogIn) => {
@@ -102,50 +103,51 @@ function RootNavigator() {
             },
             body: JSON.stringify(data),
           });
-
+  
           if (!response.ok) {
             throw new Error("Invalid credentials");
           }
-
-          const res = await response.json();
-
-          await SecureStore.setItemAsync("token", res.token);
-
-          dispatch({
-            type: "SIGN_IN",
-            token: res.token,
-          });
-        } catch (error) {
-          console.error(error);
-        }
-      },
-      signOut: async () => {
-        try {
-          const response = await fetch("https://api.txzje.xyz/auth/logout", {
-            method: "GET",
-            headers: new Headers({
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${state.token}`,
-            }),
-          });
-
-          if (!response.ok) {
-            throw new Error("Failed to logout");
-          }
-
+  
+          const token = await response.json();
+  
           await SecureStore.setItemAsync("token", "");
 
-          dispatch({ type: "SIGN_OUT" });
+  
+          dispatch({ type: "SIGN_IN", token });
         } catch (error) {
           console.error(error);
         }
       },
+      signOut: () => dispatch({ type: "SIGN_OUT" }),
       signUp: async (data: any) => {
-        // Register
+        try {
+          const response = await fetch("https://api.txzje.xyz/auth/register", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          });
+  
+          if (!response.ok) {
+            throw new Error("Failed to create user");
+          }
+  
+          const token = await response.json();
+  
+          await SecureStore.setItemAsync("token", "");
+
+  
+          dispatch({ type: "SIGN_IN", token });
+        } catch (error) {
+          console.error(error);
+        }
       },
     }),
     []
   );
+
+
 
   return (
     <AuthContext.Provider value={authContext}>
