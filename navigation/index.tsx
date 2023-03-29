@@ -121,12 +121,15 @@ function RootNavigator() {
       signOut: () => dispatch({ type: "SIGN_OUT" }),
       signUp: async (data: any) => {
         try {
+
+          const { navigate, ...userData } = data
+
           const response = await fetch("https://api.txzje.xyz/auth/register", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(data),
+            body: JSON.stringify(userData),
           });
   
           if (!response.ok) {
@@ -134,11 +137,13 @@ function RootNavigator() {
           }
   
           const token = await response.json();
-  
-          await SecureStore.setItemAsync("token", "");
+          
+          if (token.status === 202) {
+            navigate("Login")
+          } else {
+            // Error
+          }
 
-  
-          dispatch({ type: "SIGN_IN", token });
         } catch (error) {
           console.error(error);
         }

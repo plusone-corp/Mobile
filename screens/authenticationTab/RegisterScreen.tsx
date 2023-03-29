@@ -32,30 +32,38 @@ export default function RegisterScreen({
 
   const validateForm = () => {
     let newErrors: Errors = { email: '', password: '', username: '', confirmPass: '' };
+    let fine = true;
     if (!email.includes("@")) {
       newErrors.email = "The email should be email@example.com";
     }
     const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])/;
     if (!passwordRegex.test(password)) {
       newErrors.password = "The password should contain at least a capital letter and a number";
+      fine = false
     }
     if (password !== confirmPass) {
       newErrors.confirmPass = "The confirm password doesn't match";
+      fine = false
     }
     if (username.length < 6) {
+      fine = false
       newErrors.username = "The username should be at least 6 characters long";
     }
     if (password.length < 8) {
+      fine = false
       newErrors.password = "The password should be at least 8 characters long";
     }
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return fine;
   };
   const handleSignUp = async () => {
     if (validateForm()) {
       try {
-        const data = { username, email, password, confirmPass};
-        await signUp(data);
+        const data = { username, email, password, navigate: navigation.navigate };
+        const error = await signUp(data);
+        if (error) {
+          
+        }
       } catch (error: any) {
         alert(error.message);
       }
