@@ -91,38 +91,42 @@ function RootNavigator() {
     bootstrapAsync();
   }, []);
 
-
   const authContext = useMemo(
     () => ({
-      signIn: async (data: LogIn) => {
+      signIn: async ({
+        username,
+        password,
+      }: {
+        username: string;
+        password: string;
+      }) => {
         try {
           const response = await fetch("https://api.txzje.xyz/auth/login", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(data),
+            body: JSON.stringify({ username, password }),
           });
-  
+
           if (!response.ok) {
             throw new Error("Invalid credentials");
           }
-  
+
           const token = await response.json();
-  
+
           await SecureStore.setItemAsync("token", "");
 
-  
           dispatch({ type: "SIGN_IN", token });
         } catch (error) {
           console.error(error);
+          throw error;
         }
       },
       signOut: () => dispatch({ type: "SIGN_OUT" }),
       signUp: async (data: any) => {
         try {
-
-          const { navigate, ...userData } = data
+          const { navigate, ...userData } = data;
 
           const response = await fetch("https://api.txzje.xyz/auth/register", {
             method: "POST",
@@ -131,19 +135,18 @@ function RootNavigator() {
             },
             body: JSON.stringify(userData),
           });
-  
+
           if (!response.ok) {
             throw new Error("Failed to create user");
           }
-  
+
           const token = await response.json();
-          
+
           if (token.status === 202) {
-            navigate("LogIn")
+            navigate("LogIn");
           } else {
             // Error
           }
-
         } catch (error) {
           console.error(error);
         }
@@ -151,8 +154,6 @@ function RootNavigator() {
     }),
     []
   );
-
-
 
   return (
     <AuthContext.Provider value={authContext}>

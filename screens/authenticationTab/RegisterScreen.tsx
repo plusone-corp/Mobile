@@ -28,29 +28,40 @@ export default function RegisterScreen({
     password: string;
     confirmPass: string;
   }
-  const [errors, setErrors] = useState<Errors>({username: '', email: '', password: '', confirmPass: ''});
+  const [errors, setErrors] = useState<Errors>({
+    username: "",
+    email: "",
+    password: "",
+    confirmPass: "",
+  });
 
   const validateForm = () => {
-    let newErrors: Errors = { email: '', password: '', username: '', confirmPass: '' };
+    let newErrors: Errors = {
+      email: "",
+      password: "",
+      username: "",
+      confirmPass: "",
+    };
     let check = true;
     if (!email.includes("@")) {
       newErrors.email = "The email should be email@example.com";
     }
     const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])/;
     if (!passwordRegex.test(password)) {
-      newErrors.password = "The password should contain at least a capital letter and a number";
-      check = false
+      newErrors.password =
+        "The password should contain at least a capital letter and a number";
+      check = false;
     }
     if (password !== confirmPass) {
       newErrors.confirmPass = "The confirm password doesn't match";
-      check = false
+      check = false;
     }
     if (username.length < 6) {
-      check = false
+      check = false;
       newErrors.username = "The username should be at least 6 characters long";
     }
     if (password.length < 8) {
-      check = false
+      check = false;
       newErrors.password = "The password should be at least 8 characters long";
     }
     setErrors(newErrors);
@@ -59,10 +70,14 @@ export default function RegisterScreen({
   const handleSignUp = async () => {
     if (validateForm()) {
       try {
-        const data = { username, email, password, navigate: navigation.navigate };
+        const data = {
+          username,
+          email,
+          password,
+          navigate: navigation.navigate,
+        };
         const error = await signUp(data);
         if (error) {
-          
         }
       } catch (error: any) {
         alert(error.message);
@@ -81,7 +96,9 @@ export default function RegisterScreen({
             style={styles.image}
           />
           <View style={styles.login_filed}>
-          {errors.username && <Text style={styles.error}>{errors.username}</Text>}
+            {errors.username && (
+              <Text style={styles.error}>{errors.username}</Text>
+            )}
             <TextInput
               style={styles.input}
               placeholder="Username"
@@ -91,7 +108,7 @@ export default function RegisterScreen({
               value={username}
               onChangeText={setUsername}
             />
-              {errors.email && <Text style={styles.error}>{errors.email}</Text>}
+            {errors.email && <Text style={styles.error}>{errors.email}</Text>}
             <TextInput
               style={styles.input}
               placeholder="Email"
@@ -101,7 +118,9 @@ export default function RegisterScreen({
               value={email}
               onChangeText={setEmail}
             />
-              {errors.password && <Text style={styles.error}>{errors.password}</Text>}
+            {errors.password && (
+              <Text style={styles.error}>{errors.password}</Text>
+            )}
             <TextInput
               style={styles.input}
               placeholder="Password"
@@ -110,7 +129,9 @@ export default function RegisterScreen({
               value={password}
               onChangeText={setPassword}
             />
-            {errors.confirmPass && <Text style={styles.error}>{errors.confirmPass}</Text>}
+            {errors.confirmPass && (
+              <Text style={styles.error}>{errors.confirmPass}</Text>
+            )}
             <TextInput
               style={styles.input}
               placeholder="Confirm Password"
@@ -142,7 +163,7 @@ export default function RegisterScreen({
               Sign Up with Facebook{" "}
               <Feather name="facebook" size={28} color="blue" />
             </Text>
-           
+
             <Text style={styles.textLogIn}>
               Sign Up with Google{"    "}
               <AntDesign name="google" size={28} color="red" />
@@ -256,5 +277,5 @@ const styles = StyleSheet.create({
     color: "#ff0000",
     fontSize: 12,
     marginBottom: 10,
-    },
+  },
 });

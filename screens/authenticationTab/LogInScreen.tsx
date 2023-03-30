@@ -18,14 +18,14 @@ export default function LogInScreen({
   navigation,
 }: AuthStackScreenProps<"LogIn">) {
   const { signIn } = useContext(AuthContext);
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSignIn = async () => {
-    if (email === "admin" && password === "admin") {
-      signIn({ username: email, password });
-    } else {
-      alert("Invalid email or password");
+    try {
+      await signIn({ username, password });
+    } catch (error: any) {
+      alert(error.message);
     }
   };
 
@@ -46,8 +46,8 @@ export default function LogInScreen({
               placeholderTextColor="#fff"
               autoCapitalize="none"
               keyboardType="email-address"
-              value={email}
-              onChangeText={setEmail}
+              value={username}
+              onChangeText={setUsername}
             />
             <TextInput
               style={styles.input}
