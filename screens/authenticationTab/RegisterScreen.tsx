@@ -76,9 +76,7 @@ export default function RegisterScreen({
           password,
           navigate: navigation.navigate,
         };
-        const error = await signUp(data);
-        if (error) {
-        }
+        await signUp(data);
       } catch (error: any) {
         alert(error.message);
       }
