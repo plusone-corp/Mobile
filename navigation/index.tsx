@@ -124,7 +124,7 @@ function RootNavigator() {
           });
 
           if (!response.ok) {
-            throw new Error("Invalid credentials");
+            throw new Error("Invalid username or password");
           }
 
           const token = await response.json();
@@ -137,7 +137,10 @@ function RootNavigator() {
           throw error;
         }
       },
-      signOut: () => dispatch({ type: "SIGN_OUT" }),
+      signOut: async () => {
+        await SecureStore.deleteItemAsync("token");
+        dispatch({ type: "SIGN_OUT" });
+      },
       signUp: async (data: any) => {
         try {
           const { navigate, ...userData } = data;
@@ -151,7 +154,7 @@ function RootNavigator() {
           });
 
           if (!response.ok) {
-            throw new Error("Failed to create user");
+            throw new Error("Username already exists");
           }
 
           const token = await response.json();

@@ -1,26 +1,40 @@
-import { StyleSheet } from 'react-native';
+import {
+  StyleSheet,
+  TouchableOpacity,
+  StatusBar,
+  SafeAreaView,
+} from "react-native";
+import { useContext } from "react";
 
-import { Text, View } from '../../components/components/themed';
-import { RootStackScreenProps } from '../../types';
+import { Text, View } from "../../components/components/themed";
+import { RootStackScreenProps } from "../../types";
+import { AuthContext } from "../../constants/AuthContext";
 
-export default function SettingModal({ navigation }: RootStackScreenProps<'Setting'>) {
+export default function SettingModal({
+  navigation,
+}: RootStackScreenProps<"Setting">) {
+  const { signOut } = useContext(AuthContext);
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="light-content" backgroundColor="#000000" />
+
       <Text style={styles.title}>This is the setting modal</Text>
-    </View>
+      <TouchableOpacity onPress={() => signOut()} style={styles.link}>
+        <Text style={styles.linkText}>LogOut</Text>
+      </TouchableOpacity>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
+    alignItems: "center",
+    justifyContent: "center",
   },
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   link: {
     marginTop: 15,
@@ -28,6 +42,6 @@ const styles = StyleSheet.create({
   },
   linkText: {
     fontSize: 14,
-    color: '#2e78b7',
+    color: "#2e78b7",
   },
 });
