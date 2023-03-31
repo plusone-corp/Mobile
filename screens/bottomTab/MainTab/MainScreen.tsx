@@ -7,6 +7,7 @@ import {
   StatusBar,
   SafeAreaView,
   Image,
+  ScrollView,
 } from "react-native";
 import { Text, View } from "../../../components/components/themed";
 import { MainStackScreenProps } from "../../../types";
@@ -19,10 +20,15 @@ export default function MainScreenMainTabScreen({
 }: MainStackScreenProps<"MainScreen">) {
   const [user, setUser] = useState<User>();
   const [post, setPost] = useState<Post>();
-  const [createdAtDate, setDate] = useState<Date>()
-  const { signOut, refreshToken } = useContext(AuthContext)
+  const [createdAtDate, setDate] = useState<Date>();
+  const { signOut, refreshToken } = useContext(AuthContext);
+  const [isLiked, setIsLiked] = useState(false);
 
-  console.log("Rendered")
+  const handlePress = () => {
+    setIsLiked(!isLiked);
+  };
+
+  console.log("Rendered");
 
   useEffect(() => {
     async function getUser() {
@@ -33,30 +39,30 @@ export default function MainScreenMainTabScreen({
     }
 
     async function getLatestPost() {
-      const token = await SecureStore.getItemAsync("token")
+      const token = await SecureStore.getItemAsync("token");
       axios
-      .get("https://api.txzje.xyz/users/@me/post/latest", {
-        headers: {
-          'X-Token': `${token}`,
-        },
-      })
-      .then((response) => {
-        setPost(response.data.post)
-        setDate(new Date(response.data.post.createdAt))
-      })
-      .catch((error: AxiosError) => {
-        console.log(error)
-        if(error.response?.status == 408) {
-          refreshToken().then((res: boolean )=> {
-            if(!res) {
-              navigation.navigate("Authentication")
-            }
-            getLatestPost()
-          })
-        } else if(error.response?.status == 500) {
-          console.log("Not found")
-        }
-      });
+        .get("https://api.txzje.xyz/users/@me/post/latest", {
+          headers: {
+            "X-Token": `${token}`,
+          },
+        })
+        .then((response) => {
+          setPost(response.data.post);
+          setDate(new Date(response.data.post.createdAt));
+        })
+        .catch((error: AxiosError) => {
+          console.log(error);
+          if (error.response?.status == 408) {
+            refreshToken().then((res: boolean) => {
+              if (!res) {
+                navigation.navigate("Authentication");
+              }
+              getLatestPost();
+            });
+          } else if (error.response?.status == 500) {
+            console.log("Not found");
+          }
+        });
     }
 
     if (!user) getUser();
@@ -64,11 +70,11 @@ export default function MainScreenMainTabScreen({
   }, [user, setUser, post, setPost]);
 
   if (!user || !post) {
-    return <SafeAreaView style={styles.container}>
-      <Text>
-        There are no posts on this user
-      </Text>
-    </SafeAreaView>
+    return (
+      <SafeAreaView style={styles.container}>
+        <Text>There are no posts on this user</Text>
+      </SafeAreaView>
+    );
   }
   return (
     <SafeAreaView style={styles.container}>
@@ -79,57 +85,65 @@ export default function MainScreenMainTabScreen({
           <Text style={styles.linkText}>Discovery</Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.cardsContainer}>
-        <View style={styles.partyImage}>
-          <Image
-            style={styles.Img}
-            source={{
-              uri: post.image,
-            }}
-          />
-          <View style={styles.ButtonsDir}>
-            <TouchableOpacity>
-              <Text>
-                <AntDesign name="heart" size={19} color="white" />
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Text style={styles.buttonsParty}>+1</Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Text>
-                <Entypo name="emoji-sad" size={19} color="white" />
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View style={styles.align}>
-          <View style={styles.partyInfo}>
-            <View style={styles.dir}>
-              <Image
-                style={styles.Imge}
-                source={{
-                  uri: user.avatar,
-                }}
-              />
-              <Text style={styles.partyName}>{user.displayName}</Text>
+      <ScrollView style={styles.scroll}>
+        <View style={styles.cardsContainer}>
+          <View style={styles.partyImage}>
+            <Image
+              style={styles.Img}
+              source={{
+                uri: post.image,
+              }}
+            />
+            <View style={styles.ButtonsDir}>
+              <TouchableOpacity onPress={handlePress}>
+                <Text style={styles.buttonsParty}>
+                  <AntDesign
+                    name="heart"
+                    size={19}
+                    color={isLiked ? "red" : "black"}
+                  />
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <Text style={styles.buttonsParty}>+1</Text>
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <Text style={styles.buttonsParty}>
+                  <Entypo name="emoji-sad" size={19} color="black" />
+                </Text>
+              </TouchableOpacity>
             </View>
-            <Text style={styles.partyTitle}>{post.title}</Text>
-            <Text style={styles.partyDescription}>
-              {post.description}
-            </Text>
           </View>
-          <View style={styles.moreInfo}>
-            <Text style={styles.partyTime}>{createdAtDate?.toTimeString().split(" ")[0]}</Text>
-            <Text style={styles.partyDate}>{createdAtDate?.toDateString()}</Text>
-            <TouchableOpacity>
-              <Text>
-                <Ionicons name="ios-chatbox" size={25} color="black" />
+          <View style={styles.align}>
+            <View style={styles.partyInfo}>
+              <View style={styles.dir}>
+                <Image
+                  style={styles.Imge}
+                  source={{
+                    uri: user.avatar,
+                  }}
+                />
+                <Text style={styles.partyName}>{user.displayName}</Text>
+              </View>
+              <Text style={styles.partyTitle}>{post.title}</Text>
+              <Text style={styles.partyDescription}>{post.description}</Text>
+            </View>
+            <View style={styles.moreInfo}>
+              <Text style={styles.partyTime}>
+                {createdAtDate?.toTimeString().split(" ")[0]}
               </Text>
-            </TouchableOpacity>
+              <Text style={styles.partyDate}>
+                {createdAtDate?.toDateString()}
+              </Text>
+              <TouchableOpacity>
+                <Text>
+                  <Ionicons name="ios-chatbox" size={25} color="black" />
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -139,6 +153,15 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "flex-start",
+    width: "100%",
+  },
+  scroll: {
+    flexDirection: "column",
+    width: "100%",
+    paddingHorizontal: 30,
+    borderColor: "#fff",
+    marginBottom: 10,
+    backgroundColor: "transparent",
   },
   buttons: {
     width: "100%",
@@ -164,17 +187,14 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   cardsContainer: {
-    width: "80%",
+    width: "100%",
     height: "auto",
     flexDirection: "column",
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
-    borderColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 10,
-    marginTop: 30,
+    marginTop: 40,
     backgroundColor: "#fff",
-    shadowColor: "#fff",
-    elevation: 18,
   },
   partyImage: {
     position: "relative",
@@ -192,14 +212,23 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 10,
     right: 10,
+    zIndex: 3,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    gap: 15,
+    gap: 10,
     backgroundColor: "transparent",
   },
   buttonsParty: {
-    fontSize: 19,
+    fontSize: 15,
+    backgroundColor: "#fff",
+    padding: 10,
+    color: "#000",
+    borderRadius: 50,
+    borderWidth: 1,
+    borderColor: "#000",
+    alignItems: "center",
+    textAlign: "center",
   },
   align: {
     paddingHorizontal: 10,
@@ -229,12 +258,12 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     flexDirection: "row",
     gap: 10,
-    paddingHorizontal: 10,
-    paddingVertical: 2,
+    paddingHorizontal: 7,
+    paddingVertical: 3,
     justifyContent: "flex-start",
     alignItems: "flex-start",
     borderColor: "#000",
-    borderRadius: 10,
+    borderRadius: 20,
     backgroundColor: "transparent",
     borderWidth: 1,
   },
@@ -253,6 +282,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: "#000",
     fontWeight: "300",
+    paddingVertical: 5,
   },
   moreInfo: {
     width: "30%",
