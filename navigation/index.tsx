@@ -14,9 +14,8 @@ import NotFoundScreen from "../screens/root/NotFoundScreen";
 import SettingModal from "../screens/root/SettingModal";
 import AuthStackNavigator from "./Authentication/Authentication";
 import Splash from "../components/components/splash";
-import { LogIn } from "../types/forms";
 import { AuthContext } from "../constants/AuthContext";
-import * as SplashScreen from "expo-splash-screen";
+import axios, { AxiosError } from "axios";
 
 export default function Navigation({
   colorScheme,
@@ -78,6 +77,21 @@ function RootNavigator() {
 
       try {
         token = await SecureStore.getItemAsync("token");
+        if(token) {
+          axios
+          .get("https://api.txzje.xyz/users/@me", {
+            headers: {
+              'X-Token': `${token}`,
+            },
+          })
+          .then((response) => {
+            SecureStore.setItemAsync("user", JSON.stringify(response.data.user))
+          })
+          .catch((error: AxiosError) => {
+            console.log(error.response?.data);
+            console.log(error.config);
+          });
+        }
       } catch (e) {
         token = null;
       } finally {
@@ -115,7 +129,7 @@ function RootNavigator() {
 
           const token = await response.json();
 
-          await SecureStore.setItemAsync("token", "");
+          await SecureStore.setItemAsync("token", token.token.accessToken);
 
           dispatch({ type: "SIGN_IN", token });
         } catch (error) {
@@ -151,6 +165,10 @@ function RootNavigator() {
           console.error(error);
         }
       },
+      getToken: (): string => {
+        console.log(state.token)
+        return state.token
+      }
     }),
     []
   );
