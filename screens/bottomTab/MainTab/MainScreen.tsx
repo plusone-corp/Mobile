@@ -22,6 +22,8 @@ export default function MainScreenMainTabScreen({
   const [createdAtDate, setDate] = useState<Date>()
   const { signOut, refreshToken } = useContext(AuthContext)
 
+  console.log("Rendered")
+
   useEffect(() => {
     async function getUser() {
       const userStr = await SecureStore.getItemAsync("user");
@@ -43,6 +45,7 @@ export default function MainScreenMainTabScreen({
         setDate(new Date(response.data.post.createdAt))
       })
       .catch((error: AxiosError) => {
+        console.log(error)
         if(error.response?.status == 408) {
           refreshToken().then((res: boolean )=> {
             if(!res) {
@@ -50,10 +53,9 @@ export default function MainScreenMainTabScreen({
             }
             getLatestPost()
           })
+        } else if(error.response?.status == 500) {
+          console.log("Not found")
         }
-        SecureStore.setItemAsync("token", "").then(() => {
-          signOut()
-        })
       });
     }
 
@@ -62,7 +64,11 @@ export default function MainScreenMainTabScreen({
   }, [user, setUser, post, setPost]);
 
   if (!user || !post) {
-    return null
+    return <SafeAreaView style={styles.container}>
+      <Text>
+        There are no posts on this user
+      </Text>
+    </SafeAreaView>
   }
   return (
     <SafeAreaView style={styles.container}>

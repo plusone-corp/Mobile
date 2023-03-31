@@ -141,6 +141,7 @@ function RootNavigator() {
       },
       signOut: async () => {
         await SecureStore.deleteItemAsync("token");
+        await SecureStore.deleteItemAsync("refreshToken");
         dispatch({ type: "SIGN_OUT" });
       },
       signUp: async (data: any) => {
