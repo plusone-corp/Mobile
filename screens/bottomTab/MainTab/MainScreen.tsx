@@ -11,12 +11,15 @@ import {
 import { Text, View } from "../../../components/components/themed";
 import { MainStackScreenProps } from "../../../types";
 import { Entypo, AntDesign, Ionicons } from "@expo/vector-icons";
+import { Post, User } from "../../../types/app";
+import axios, { AxiosError } from "axios";
 
 export default function MainScreenMainTabScreen({
   navigation,
 }: MainStackScreenProps<"MainScreen">) {
-  const { signOut } = useContext(AuthContext);
-  const [user, setUser] = useState<any>();
+  const [user, setUser] = useState<User>();
+  const [post, setPost] = useState<Post>();
+  const [createdAtDate, setDate] = useState<Date>()
 
   useEffect(() => {
     async function getUser() {
@@ -28,9 +31,32 @@ export default function MainScreenMainTabScreen({
       setUser(userObj);
     }
 
+    async function getLatestPost() {
+      const token = await SecureStore.getItemAsync("token")
+      axios
+      .get("https://api.txzje.xyz/users/@me/post/latest", {
+        headers: {
+          'X-Token': `${token}`,
+        },
+      })
+      .then((response) => {
+        console.log(response.data)
+        setPost(response.data.post)
+        setDate(new Date(response.data.post.createdAt))
+      })
+      .catch((error: AxiosError) => {
+        console.log(error.response?.data);
+        console.log(error.config);
+      });
+    }
+
     if (!user) getUser();
+    if (!post) getLatestPost();
   }, [user, setUser]);
 
+  if (!user || !post) {
+    return null
+  }
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#000000" />
@@ -45,7 +71,7 @@ export default function MainScreenMainTabScreen({
           <Image
             style={styles.Img}
             source={{
-              uri: "https://cdn.discordapp.com/attachments/979617962728226826/1090887889799352320/DALLE_2023-03-30_02.34.47_-_neon_squirrel_high_detail_digital_art_ambient_lighting_trending_on_artstation.png",
+              uri: post.image,
             }}
           />
           <View style={styles.ButtonsDir}>
@@ -70,20 +96,19 @@ export default function MainScreenMainTabScreen({
               <Image
                 style={styles.Imge}
                 source={{
-                  uri: "https://cdn.discordapp.com/attachments/979617962728226826/1091050191093764106/OIG_51.jpg",
+                  uri: user.avatar,
                 }}
               />
-              <Text style={styles.partyName}>Name</Text>
+              <Text style={styles.partyName}>{user.displayName}</Text>
             </View>
-            <Text style={styles.partyTitle}>Title</Text>
+            <Text style={styles.partyTitle}>{post.title}</Text>
             <Text style={styles.partyDescription}>
-              Description [ limit to 20-30 words ]
+              {post.description}
             </Text>
           </View>
           <View style={styles.moreInfo}>
-            <Text style={styles.partyTime}>10:99 PM</Text>
-            <Text style={styles.partyDate}>03/22/23</Text>
-            <Text style={styles.partyLocation}>Location</Text>
+            <Text style={styles.partyTime}>{createdAtDate?.toTimeString().split(" ")[0]}</Text>
+            <Text style={styles.partyDate}>{createdAtDate?.toDateString()}</Text>
             <TouchableOpacity>
               <Text>
                 <Ionicons name="ios-chatbox" size={25} color="black" />
@@ -230,18 +255,21 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontStyle: "italic",
     fontWeight: "400",
+    textAlign: "right",
     color: "#000",
   },
   partyDate: {
-    fontSize: 13,
+    fontSize: 11,
     fontStyle: "italic",
     fontWeight: "400",
+    textAlign: "right",
     color: "#000",
   },
   partyLocation: {
     fontSize: 13,
     fontStyle: "italic",
     color: "#000",
+    textAlign: "right",
     fontWeight: "400",
   },
 });
