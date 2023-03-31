@@ -85,11 +85,12 @@ function RootNavigator() {
             },
           })
           .then((response) => {
+            console.log(response.headers)
             SecureStore.setItemAsync("user", JSON.stringify(response.data.user))
           })
           .catch((error: AxiosError) => {
-            console.log(error.response?.data);
-            console.log(error.config);
+            console.log(error.response?.headers);
+            console.log(error.config?.headers);
           });
         }
       } catch (e) {
@@ -130,6 +131,7 @@ function RootNavigator() {
           const token = await response.json();
 
           await SecureStore.setItemAsync("token", token.token.accessToken);
+          await SecureStore.setItemAsync("refreshToken", token.token.refreshToken);
 
           dispatch({ type: "SIGN_IN", token });
         } catch (error) {
@@ -167,6 +169,28 @@ function RootNavigator() {
         } catch (error) {
           console.error(error);
         }
+      },
+      refreshToken: async(data: any): Promise<boolean> => {
+        const refreshToken = await SecureStore.getItemAsync("refreshToken")
+        if(!refreshToken) return false;
+        const response = await fetch("https://api.txzje.xyz/auth/refresh", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Token": refreshToken,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Invalid refresh token, please login again");
+        }
+
+        const token = await response.json();
+
+        await SecureStore.setItemAsync("token", token.token.accessToken);
+        await SecureStore.setItemAsync("refreshToken", token.token.refreshToken);
+
+        return true;
       },
       getToken: (): string => {
         console.log(state.token)

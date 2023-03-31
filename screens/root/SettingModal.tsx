@@ -17,7 +17,6 @@ export default function SettingModal({
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#000000" />
-
       <Text style={styles.title}>This is the setting modal</Text>
       <TouchableOpacity onPress={() => signOut()} style={styles.link}>
         <Text style={styles.linkText}>LogOut</Text>

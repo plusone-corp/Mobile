@@ -20,13 +20,12 @@ export default function MainScreenMainTabScreen({
   const [user, setUser] = useState<User>();
   const [post, setPost] = useState<Post>();
   const [createdAtDate, setDate] = useState<Date>()
+  const { signOut, refreshToken } = useContext(AuthContext)
 
   useEffect(() => {
     async function getUser() {
       const userStr = await SecureStore.getItemAsync("user");
       const userObj = JSON.parse(userStr ?? "{}");
-
-      console.log(userObj);
 
       setUser(userObj);
     }
@@ -40,19 +39,27 @@ export default function MainScreenMainTabScreen({
         },
       })
       .then((response) => {
-        console.log(response.data)
         setPost(response.data.post)
         setDate(new Date(response.data.post.createdAt))
       })
       .catch((error: AxiosError) => {
-        console.log(error.response?.data);
-        console.log(error.config);
+        if(error.response?.status == 408) {
+          refreshToken().then((res: boolean )=> {
+            if(!res) {
+              navigation.navigate("Authentication")
+            }
+            getLatestPost()
+          })
+        }
+        SecureStore.setItemAsync("token", "").then(() => {
+          signOut()
+        })
       });
     }
 
     if (!user) getUser();
     if (!post) getLatestPost();
-  }, [user, setUser]);
+  }, [user, setUser, post, setPost]);
 
   if (!user || !post) {
     return null
