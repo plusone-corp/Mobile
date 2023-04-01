@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { Text, View } from "../../../components/components/themed";
 import { MainStackScreenProps } from "../../../types";
-import { Entypo, AntDesign, Ionicons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { Post, User } from "../../../types/app";
 import axios, { AxiosError } from "axios";
 
@@ -28,8 +28,6 @@ export default function MainScreenMainTabScreen({
     setIsLiked(!isLiked);
   };
 
-  console.log("Rendered");
-
   useEffect(() => {
     async function getUser() {
       const userStr = await SecureStore.getItemAsync("user");
@@ -43,7 +41,7 @@ export default function MainScreenMainTabScreen({
       axios
         .get("https://api.txzje.xyz/users/@me/post/latest", {
           headers: {
-            "X-Token": `${token}`,
+            "Authorization": `Bearer ${token}`,
           },
         })
         .then((response) => {
@@ -95,21 +93,17 @@ export default function MainScreenMainTabScreen({
               }}
             />
             <View style={styles.ButtonsDir}>
-              <TouchableOpacity onPress={handlePress}>
-                <Text style={styles.buttonsParty}>
-                  <AntDesign
-                    name="heart"
-                    size={19}
-                    color={isLiked ? "red" : "black"}
-                  />
+              <TouchableOpacity onPress={handlePress} style={styles.buttonsParty}>
+                <Text>
+                  ❤️
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity>
-                <Text style={styles.buttonsParty}>+1</Text>
+              <TouchableOpacity style={styles.buttonsParty}>
+                <Text>😂</Text>
               </TouchableOpacity>
-              <TouchableOpacity>
-                <Text style={styles.buttonsParty}>
-                  <Entypo name="emoji-sad" size={19} color="black" />
+              <TouchableOpacity style={styles.buttonsParty}>
+                <Text>
+                  😍
                 </Text>
               </TouchableOpacity>
             </View>
@@ -217,18 +211,25 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     gap: 10,
-    backgroundColor: "transparent",
+    backgroundColor: "",
   },
   buttonsParty: {
     fontSize: 15,
-    backgroundColor: "#fff",
     padding: 10,
+    mixBlendMode: 'difference',
+    backgroundColor: 'white',
     color: "#000",
-    borderRadius: 50,
-    borderWidth: 1,
+    borderRadius: 10,
+    borderWidth: 2,
     borderColor: "#000",
     alignItems: "center",
     textAlign: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.5,
   },
   align: {
     paddingHorizontal: 10,
