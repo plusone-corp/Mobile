@@ -14,9 +14,8 @@ import NotFoundScreen from "../screens/root/NotFoundScreen";
 import SettingModal from "../screens/root/SettingModal";
 import AuthStackNavigator from "./Authentication/Authentication";
 import Splash from "../components/components/splash";
-import { LogIn } from "../types/forms";
 import { AuthContext } from "../constants/AuthContext";
-import * as SplashScreen from "expo-splash-screen";
+import axios, { AxiosError } from "axios";
 
 export default function Navigation({
   colorScheme,
@@ -42,50 +41,64 @@ function RootNavigator() {
         case "RESTORE_TOKEN":
           return {
             ...prevState,
-            userToken: action.token,
+            token: action.token,
             isLoading: false,
           };
         case "SIGN_IN":
           return {
             ...prevState,
-            isSignout: false,
-            userToken: action.token,
+            token: action.token,
+            isLoading: false,
           };
         case "SIGN_OUT":
           return {
             ...prevState,
             isSignout: true,
-            userToken: action.token,
+            token: action.token,
+          };
+        case "SIGN_UP":
+          return {
+            ...prevState,
+            isSignout: true,
+            token: null,
           };
       }
     },
     {
       isLoading: true,
       isSignout: false,
-      userToken: null,
+      token: null,
     }
   );
 
-  const DEF_DELAY = 1000;
-
-  function sleep(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms || DEF_DELAY));
-  }
   useEffect(() => {
     const bootstrapAsync = async () => {
-      let userToken: string | null = null;
+      let token: string | null = null;
 
       try {
-        userToken = await SecureStore.getItemAsync("userToken");
-        await sleep(2000);
-        console.log(userToken);
+        token = await SecureStore.getItemAsync("token");
+        if(token) {
+          axios
+          .get("https://api.txzje.xyz/users/@me", {
+            headers: {
+              'X-Token': `${token}`,
+            },
+          })
+          .then((response) => {
+            console.log(response.headers)
+            SecureStore.setItemAsync("user", JSON.stringify(response.data.user))
+          })
+          .catch((error: AxiosError) => {
+            console.log(error.response?.headers);
+            console.log(error.config?.headers);
+          });
+        }
       } catch (e) {
-        console.log(e);
-        userToken = null;
+        token = null;
       } finally {
         dispatch({
           type: "RESTORE_TOKEN",
-          token: userToken,
+          token: token,
         });
       }
     };
@@ -95,24 +108,95 @@ function RootNavigator() {
 
   const authContext = useMemo(
     () => ({
-      signIn: async (data: LogIn) => {
-        // Call the api and then recieve a generated token from the server
-        /*
-          const token = fetch(server, {
-            header: {
-              "Authentication": "Bearer TOKEN"
-            }
-          })
-          SecureStore.save(token)
-        */
-        console.log(data);
-        dispatch({ type: "SIGN_IN", token: "randomtoken2" });
+      signIn: async ({
+        username,
+        password,
+      }: {
+        username: string;
+        password: string;
+      }) => {
+        try {
+          const response = await fetch("https://api.txzje.xyz/auth/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ username, password }),
+          });
+
+          if (!response.ok) {
+            throw new Error("Invalid username or password");
+          }
+
+          const token = await response.json();
+
+          await SecureStore.setItemAsync("token", token.token.accessToken);
+          await SecureStore.setItemAsync("refreshToken", token.token.refreshToken);
+
+          dispatch({ type: "SIGN_IN", token });
+        } catch (error) {
+          console.error(error);
+          throw error;
+        }
       },
-      signOut: () => dispatch({ type: "SIGN_OUT" }),
+      signOut: async () => {
+        await SecureStore.deleteItemAsync("token");
+        await SecureStore.deleteItemAsync("refreshToken");
+        dispatch({ type: "SIGN_OUT" });
+      },
       signUp: async (data: any) => {
-        // Call the api and then recieve a generated token from the server
-        dispatch({ type: "SIGN_IN", token: "randomtoken3" });
+        try {
+          const { navigate, ...userData } = data;
+
+          const response = await fetch("https://api.txzje.xyz/auth/register", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(userData),
+          });
+
+          if (!response.ok) {
+            throw new Error("Username already exists");
+          }
+
+          const token = await response.json();
+
+          if (token.status === 202) {
+            navigate("LogIn");
+          } else {
+            // Error
+          }
+        } catch (error) {
+          console.error(error);
+        }
       },
+      refreshToken: async(data: any): Promise<boolean> => {
+        const refreshToken = await SecureStore.getItemAsync("refreshToken")
+        if(!refreshToken) return false;
+        const response = await fetch("https://api.txzje.xyz/auth/refresh", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Token": refreshToken,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Invalid refresh token, please login again");
+        }
+
+        const token = await response.json();
+
+        await SecureStore.setItemAsync("token", token.token.accessToken);
+        await SecureStore.setItemAsync("refreshToken", token.token.refreshToken);
+
+        return true;
+      },
+      getToken: (): string => {
+        console.log(state.token)
+        return state.token
+      }
     }),
     []
   );
@@ -126,7 +210,7 @@ function RootNavigator() {
       >
         {state.isLoading ? (
           <Stack.Screen name="Splash" component={Splash} />
-        ) : state.userToken != null ? (
+        ) : state.token ? (
           <>
             <Stack.Screen
               name="Root"

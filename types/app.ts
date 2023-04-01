@@ -1,79 +1,53 @@
-/*
-
-backend: 
-    - node.js, express, socket.io, modular
-      - database group, user group, auth group
-    - mongodb, redis
-frontend:
-    - react native, expo
-    - css
-testing: // github/workflow
-    frontend: cypress
-    backend: jest
-
-*/
-
-
-// Thirty party login
-// Email 2fa code
-
 export interface User {
-    username: string;
-    email: string;
-    avatar: string;
-    displayName: string;
-    description?: string;
-    age?: number;
-    location?: string; // country
-    events: [Event];
-    createdAt: Date;
-    level: Level;
-    post: [Post];
+  _id: string;
+  email: string;
+  username: string;
+  avatar: string;
+  displayName: string;
+  description: string;
+  age: number;
+  createdAt: string;
+  events: Event[];
+  location: string;
+  level: Level;
+  friends: any[];
+  credentials: Credentials;
 }
 
-interface Level {
-    exp: number;
-    level: number;
-    /*
-        0 - level 1, badge iron
-        1 - level 5, badge silver
-    */
-    badges: number; 
+export interface Event {
+  _id: string;
+  createdAt: string;
+  title: string;
+  description: string;
+  ageLimit: number;
+  author: string;
+  invites: any[];
+  comments: any[];
+  reactions: any[];
+  Posts: string[];
 }
 
-interface Event {
-    id: string; // ObjectID
-    createdAt: string;
-    title: string;
-    description: string;
-    ageLimit: number; // n % 2 + 7
-    author: string; // ObjectID user
-    invites: [Invite]; // ObjectID user
-    comments: [Comment];
-    reactions: [Reaction];
+export interface Level {
+  exp: number;
+  level: number;
+  badges: number;
 }
 
-interface Comment {
-    author: string; // user
-    content: string;
-    reactions: [Reaction];
-    createdAt: Date;
+export interface Credentials {
+  password: string;
+  hash: any;
+  refreshToken: string;
+  lastRefreshed: string;
 }
 
-interface Reaction {
-    author: string;
-    reaction: number; // Reaction ID
-}
-
-interface Invite {
-    user: string; // ObjectID
-    status: 0 | 1 | 2 // 0 - accepted, 1 - declined, 2 - waiting
-}
-
-interface Post {
-    event: string; // Object ID
-    author: string; // ObjectID
-    image: string; // Image url
-    reactions: [Reaction];
-    comments: [Comment];
+export interface Post {
+    _id: string
+    description: string
+    event: string
+    title: string
+    author: string
+    image: string
+    reactions: any[]
+    comments: any[]
+    createdAt: string
 }

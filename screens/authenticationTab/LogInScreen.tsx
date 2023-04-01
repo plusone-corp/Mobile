@@ -11,13 +11,23 @@ import {
 import { Feather, AntDesign } from "@expo/vector-icons";
 import { Text, View } from "../../components/components/themed";
 import { AuthStackScreenProps } from "../../types";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../../constants/AuthContext";
 
 export default function LogInScreen({
   navigation,
 }: AuthStackScreenProps<"LogIn">) {
   const { signIn } = useContext(AuthContext);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSignIn = async () => {
+    try {
+      await signIn({ username, password });
+    } catch (error: any) {
+      alert(error.message);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -36,14 +46,17 @@ export default function LogInScreen({
               placeholderTextColor="#fff"
               autoCapitalize="none"
               keyboardType="email-address"
+              value={username}
+              onChangeText={setUsername}
             />
             <TextInput
               style={styles.input}
               placeholder="Password"
               placeholderTextColor="#fff"
               secureTextEntry
+              value={password}
+              onChangeText={setPassword}
             />
-
             <View style={styles.fix}>
               <TouchableOpacity
                 onPress={() => navigation.push("ForgotPassword")}
@@ -62,10 +75,7 @@ export default function LogInScreen({
                 <Text style={styles.linkText}>Sign Up!</Text>
               </TouchableOpacity>
             </View>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => signIn({ username: "admin", password: "admin" })}
-            >
+            <TouchableOpacity style={styles.button} onPress={handleSignIn}>
               <Text style={styles.buttonText}>Login</Text>
             </TouchableOpacity>
           </View>
@@ -171,7 +181,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   textLogIn: {
-    width: "70%",
+    width: "85%",
     fontWeight: "bold",
     textAlign: "center",
     fontSize: 19,
