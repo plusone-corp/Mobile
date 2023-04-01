@@ -129,7 +129,9 @@ export default function MainScreenMainTabScreen({
               <Text style={styles.partyDate}>
                 {createdAtDate?.toDateString()}
               </Text>
-              <TouchableOpacity>
+              <TouchableOpacity style={{
+                marginTop: "auto"
+              }}>
                 <Text>
                   <Ionicons name="ios-chatbox" size={25} color="black" />
                 </Text>
@@ -195,11 +197,12 @@ const styles = StyleSheet.create({
     width: "100%",
     aspectRatio: 1 / 0.8,
     borderRadius: 10,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
   },
   Img: {
     width: "100%",
     height: "100%",
-    borderRadius: 10,
     resizeMode: "cover",
   },
   ButtonsDir: {
