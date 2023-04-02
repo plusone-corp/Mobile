@@ -71,27 +71,63 @@ function RootNavigator() {
     }
   );
 
+  async function refreshToken() {
+    const refreshToken = await SecureStore.getItemAsync("refreshToken");
+    if (!refreshToken) return false;
+    const response = await fetch("https://api.txzje.xyz/auth/refresh", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${refreshToken}`,
+      },
+    });
+
+    if (!response.ok) {
+      return false;
+    }
+
+    const token = await response.json();
+
+    if (token.status != 200) {
+      SecureStore.setItemAsync("token", "");
+      SecureStore.setItemAsync("refreshToken", "");
+      return false;
+    }
+
+    await SecureStore.setItemAsync("token", token.token.accessToken);
+    await SecureStore.setItemAsync("refreshToken", token.token.refreshToken);
+
+    return true;
+  }
+
   useEffect(() => {
     const bootstrapAsync = async () => {
       let token: string | null = null;
 
       try {
         token = await SecureStore.getItemAsync("token");
-        if(token) {
-          axios
-          .get("https://api.txzje.xyz/users/@me", {
-            headers: {
-              'X-Token': `${token}`,
-            },
-          })
-          .then((response) => {
-            console.log(response.headers)
-            SecureStore.setItemAsync("user", JSON.stringify(response.data.user))
-          })
-          .catch((error: AxiosError) => {
-            console.log(error.response?.headers);
-            console.log(error.config?.headers);
-          });
+        if (token && token?.length > 10) {
+          const user = await SecureStore.getItemAsync("user");
+          if (!user) {
+            const response = await fetch("https://api.txzje.xyz/users/@me", {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+
+            const res = await response.json();
+            if (res.status == 200) {
+              SecureStore.setItemAsync("user", JSON.stringify(res.user));
+            } else if (res.status == 408) {
+              refreshToken().then((res) => {
+                if (!res) {
+                  token = null;
+                }
+              });
+            } else {
+              token = null
+            }
+          }
         }
       } catch (e) {
         token = null;
@@ -131,7 +167,11 @@ function RootNavigator() {
           const token = await response.json();
 
           await SecureStore.setItemAsync("token", token.token.accessToken);
-          await SecureStore.setItemAsync("refreshToken", token.token.refreshToken);
+          await SecureStore.setItemAsync(
+            "refreshToken",
+            token.token.refreshToken
+          );
+          await SecureStore.setItemAsync("user", JSON.stringify(token.user));
 
           dispatch({ type: "SIGN_IN", token });
         } catch (error) {
@@ -171,32 +211,11 @@ function RootNavigator() {
           console.error(error);
         }
       },
-      refreshToken: async(data: any): Promise<boolean> => {
-        const refreshToken = await SecureStore.getItemAsync("refreshToken")
-        if(!refreshToken) return false;
-        const response = await fetch("https://api.txzje.xyz/auth/refresh", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Token": refreshToken,
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error("Invalid refresh token, please login again");
-        }
-
-        const token = await response.json();
-
-        await SecureStore.setItemAsync("token", token.token.accessToken);
-        await SecureStore.setItemAsync("refreshToken", token.token.refreshToken);
-
-        return true;
-      },
+      refreshToken,
       getToken: (): string => {
-        console.log(state.token)
-        return state.token
-      }
+        console.log(state.token);
+        return state.token;
+      },
     }),
     []
   );

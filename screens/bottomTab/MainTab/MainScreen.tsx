@@ -50,10 +50,17 @@ export default function MainScreenMainTabScreen({
         })
         .catch((error: AxiosError) => {
           console.log(error);
-          if (error.response?.status == 408) {
-            refreshToken().then((res: boolean) => {
+          if (error.response?.status == 403) {
+            refreshToken(token).then(async(res: boolean) => {
               if (!res) {
-                navigation.navigate("Authentication");
+                await SecureStore.setItemAsync("refreshToken", "")
+                await SecureStore.setItemAsync("accessToken", "")
+                navigation.navigate("Root", {
+                  screen: "Authentication",
+                  params: {
+                    screen: "LogIn"
+                  }
+                });
               }
               getLatestPost();
             });

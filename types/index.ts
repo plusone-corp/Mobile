@@ -20,7 +20,7 @@ export type RootStackParamList = {
   Setting: undefined;
   NotFound: undefined;
   Authentication: undefined;
-  Splash: undefined
+  Splash: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
@@ -33,6 +33,7 @@ export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
 export type RootTabParamList = {
   Main: NavigatorScreenParams<MainStackScreenList> | undefined;
   Profile: NavigatorScreenParams<ProfileStackScreenList> | undefined;
+  Authentication: NavigatorScreenParams<AuthStackParamList> | undefined;
 };
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
@@ -57,20 +58,18 @@ export type ProfileStackScreenList = {
 export type MainStackScreenProps<Screen extends keyof MainStackScreenList> =
   CompositeScreenProps<
     NativeStackScreenProps<MainStackScreenList, Screen>,
-    CompositeScreenProps<
-      BottomTabScreenProps<RootTabParamList>,
-      NativeStackScreenProps<RootStackParamList>
-    >
+    NativeStackScreenProps<RootStackParamList>
   >;
 
-export type ProfileStackScreenProps<Screen extends keyof ProfileStackScreenList> =
+export type ProfileStackScreenProps<
+  Screen extends keyof ProfileStackScreenList
+> = CompositeScreenProps<
+  NativeStackScreenProps<ProfileStackScreenList, Screen>,
   CompositeScreenProps<
-    NativeStackScreenProps<ProfileStackScreenList, Screen>,
-    CompositeScreenProps<
-      BottomTabScreenProps<RootTabParamList>,
-      NativeStackScreenProps<RootStackParamList>
-    >
-  >;
+    BottomTabScreenProps<RootTabParamList>,
+    NativeStackScreenProps<RootStackParamList>
+  >
+>;
 
 /*
   Authentication Tab
@@ -79,11 +78,11 @@ export type ProfileStackScreenProps<Screen extends keyof ProfileStackScreenList>
 export type AuthStackParamList = {
   LogIn: undefined;
   Register: undefined;
-  ForgotPassword: undefined
+  ForgotPassword: undefined;
 };
 
 export type AuthStackScreenProps<Screen extends keyof AuthStackParamList> =
   CompositeScreenProps<
-  NativeStackScreenProps<AuthStackParamList, Screen>,
+    NativeStackScreenProps<AuthStackParamList, Screen>,
     NativeStackScreenProps<RootStackParamList>
   >;
