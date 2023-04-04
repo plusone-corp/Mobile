@@ -82,11 +82,9 @@ function RootNavigator() {
       },
     });
 
-    if (!response.ok) {
-      return false;
-    }
-
     const token = await response.json();
+
+    console.log("Refresh", token)
 
     if (token.status != 200) {
       SecureStore.setItemAsync("token", "");
@@ -106,29 +104,6 @@ function RootNavigator() {
 
       try {
         token = await SecureStore.getItemAsync("token");
-        if (token && token?.length > 10) {
-          const user = await SecureStore.getItemAsync("user");
-          if (!user) {
-            const response = await fetch("https://api.txzje.xyz/users/@me", {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            });
-
-            const res = await response.json();
-            if (res.status == 200) {
-              SecureStore.setItemAsync("user", JSON.stringify(res.user));
-            } else if (res.status == 408) {
-              refreshToken().then((res) => {
-                if (!res) {
-                  token = null;
-                }
-              });
-            } else {
-              token = null
-            }
-          }
-        }
       } catch (e) {
         token = null;
       } finally {
@@ -196,16 +171,12 @@ function RootNavigator() {
             body: JSON.stringify(userData),
           });
 
-          if (!response.ok) {
-            throw new Error("Username already exists");
-          }
-
           const token = await response.json();
 
           if (token.status === 202) {
             navigate("LogIn");
           } else {
-            // Error
+            throw new Error(token.message)
           }
         } catch (error) {
           console.error(error);
