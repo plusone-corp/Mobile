@@ -41,7 +41,7 @@ export default function MainScreenMainTabScreen({
       axios
         .get("https://api.txzje.xyz/users/@me/post/latest", {
           headers: {
-            "Authorization": `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
         })
         .then((response) => {
@@ -51,18 +51,18 @@ export default function MainScreenMainTabScreen({
         .catch((error: AxiosError) => {
           console.log(error);
           if (error.response?.status == 403) {
-            refreshToken(token).then(async(res: boolean) => {
+            refreshToken(token).then(async (res: boolean) => {
               if (!res) {
                 navigation.navigate("Root", {
                   screen: "Authentication",
                   params: {
-                    screen: "LogIn"
-                  }
+                    screen: "LogIn",
+                  },
                 });
-                return
-              } else if(res) {
+                return;
+              } else if (res) {
                 getLatestPost();
-                return
+                return;
               }
             });
           } else if (error.response?.status == 500) {
@@ -78,6 +78,13 @@ export default function MainScreenMainTabScreen({
   if (!user || !post) {
     return (
       <SafeAreaView style={styles.container}>
+        <StatusBar barStyle="light-content" backgroundColor="#000000" />
+        <View style={styles.buttons}>
+          <Text style={styles.title}>Main screen</Text>
+          <TouchableOpacity onPress={() => navigation.push("DiscoveryScreen")}>
+            <Text style={styles.linkText}>Discovery</Text>
+          </TouchableOpacity>
+        </View>
         <Text>There are no posts on this user</Text>
       </SafeAreaView>
     );
@@ -101,70 +108,14 @@ export default function MainScreenMainTabScreen({
               }}
             />
             <View style={styles.ButtonsDir}>
-              <TouchableOpacity onPress={handlePress} style={styles.buttonsParty}>
-                <Text>
-                  ❤️
-                </Text>
+              <TouchableOpacity
+                onPress={handlePress}
+                style={styles.buttonsParty}
+              >
+                <Text>❤️</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.buttonsParty}>
-                <Text>
-                  😍
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.buttonsParty}>
-                <Text>😂</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.align}>
-            <View style={styles.partyInfo}>
-              <View style={styles.dir}>
-                <Image
-                  style={styles.Imge}
-                  source={{
-                    uri: user.avatar,
-                  }}
-                />
-                <Text style={styles.partyName}>{user.displayName}</Text>
-              </View>
-              <Text style={styles.partyTitle}>{post.title}</Text>
-              <Text style={styles.partyDescription}>{post.description}</Text>
-            </View>
-            <View style={styles.moreInfo}>
-              <Text style={styles.partyTime}>
-                {createdAtDate?.toTimeString().split(" ")[0]}
-              </Text>
-              <Text style={styles.partyDate}>
-                {createdAtDate?.toDateString()}
-              </Text>
-              <TouchableOpacity style={{
-                marginTop: "auto"
-              }}>
-                <Text>
-                  <Ionicons name="ios-chatbox" size={25} color="black" />
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-        <View style={styles.cardsContainer}>
-          <View style={styles.partyImage}>
-            <Image
-              style={styles.Img}
-              source={{
-                uri: post.image,
-              }}
-            />
-            <View style={styles.ButtonsDir}>
-              <TouchableOpacity onPress={handlePress} style={styles.buttonsParty}>
-                <Text>
-                  ❤️
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.buttonsParty}>
-                <Text>
-                  😍
-                </Text>
+                <Text>😍</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.buttonsParty}>
                 <Text>😂</Text>
@@ -192,64 +143,11 @@ export default function MainScreenMainTabScreen({
               <Text style={styles.partyDate}>
                 {createdAtDate?.toDateString()}
               </Text>
-              <TouchableOpacity style={{
-                marginTop: "auto"
-              }}>
-                <Text>
-                  <Ionicons name="ios-chatbox" size={25} color="black" />
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-        <View style={styles.cardsContainer}>
-          <View style={styles.partyImage}>
-            <Image
-              style={styles.Img}
-              source={{
-                uri: post.image,
-              }}
-            />
-            <View style={styles.ButtonsDir}>
-              <TouchableOpacity onPress={handlePress} style={styles.buttonsParty}>
-                <Text>
-                  ❤️
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.buttonsParty}>
-                <Text>
-                  😍
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.buttonsParty}>
-                <Text>😂</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.align}>
-            <View style={styles.partyInfo}>
-              <View style={styles.dir}>
-                <Image
-                  style={styles.Imge}
-                  source={{
-                    uri: user.avatar,
-                  }}
-                />
-                <Text style={styles.partyName}>{user.displayName}</Text>
-              </View>
-              <Text style={styles.partyTitle}>{post.title}</Text>
-              <Text style={styles.partyDescription}>{post.description}</Text>
-            </View>
-            <View style={styles.moreInfo}>
-              <Text style={styles.partyTime}>
-                {createdAtDate?.toTimeString().split(" ")[0]}
-              </Text>
-              <Text style={styles.partyDate}>
-                {createdAtDate?.toDateString()}
-              </Text>
-              <TouchableOpacity style={{
-                marginTop: "auto"
-              }}>
+              <TouchableOpacity
+                style={{
+                  marginTop: "auto",
+                }}
+              >
                 <Text>
                   <Ionicons name="ios-chatbox" size={25} color="black" />
                 </Text>
@@ -337,8 +235,8 @@ const styles = StyleSheet.create({
   buttonsParty: {
     fontSize: 15,
     padding: 10,
-    mixBlendMode: 'difference',
-    backgroundColor: 'white',
+    mixBlendMode: "difference",
+    backgroundColor: "white",
     color: "#000",
     borderRadius: 10,
     borderWidth: 2,
