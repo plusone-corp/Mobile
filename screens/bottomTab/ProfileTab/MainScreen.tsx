@@ -1,10 +1,26 @@
 import { useState } from "react";
-import { StyleSheet } from "react-native";
-import { Image, TouchableOpacity, ScrollView } from "react-native";
+import { StyleSheet, Image, TouchableOpacity, ScrollView } from "react-native";
+import ColumnCards from "./posts/ColumnCards";
+import GridCards from "./posts/GridCards";
 
 import { Text, View } from "../../../components/components/themed";
 import { ProfileStackScreenProps } from "../../../types";
 import { Entypo } from "@expo/vector-icons";
+
+interface Badge {
+  id: string;
+  img: string;
+}
+const badges: Badge[] = [
+  {
+    id: "11",
+    img: "https://cdn.discordapp.com/attachments/979617962728226826/1093945331214987314/image.png",
+  },
+  {
+    id: "22",
+    img: "https://cdn.discordapp.com/attachments/979617962728226826/1093945331214987314/image.png",
+  },
+];
 
 export default function MainScreenProfileTabScreen({
   navigation,
@@ -44,8 +60,15 @@ export default function MainScreenProfileTabScreen({
             <View style={styles.BadgeName}>
               <Text style={styles.displayname}>displayname</Text>
               <View style={styles.badgeView}>
-                {/* ill put an map function here for the badges  */}
-                <Image source={icon} style={styles.badge} />
+                {badges.map((badge) => (
+                  <Image
+                    key={badge.id}
+                    source={{
+                      uri: badge.img,
+                    }}
+                    style={styles.badge}
+                  />
+                ))}
               </View>
             </View>
           </View>
@@ -86,7 +109,7 @@ export default function MainScreenProfileTabScreen({
                 color: showFirstDiv ? "#fff" : "#c5c5c5",
                 borderBottomColor: showFirstDiv ? "#fff" : "transparent",
                 borderBottomWidth: 2,
-                paddingHorizontal: 30,
+                paddingHorizontal: 50,
               }}
             >
               <Entypo name="menu" size={35} color="white" />
@@ -100,7 +123,7 @@ export default function MainScreenProfileTabScreen({
                 color: showSecondDiv ? "#fff" : "#c5c5c5",
                 borderBottomColor: showSecondDiv ? "#fff" : "transparent",
                 borderBottomWidth: 2,
-                paddingHorizontal: 30,
+                paddingHorizontal: 50,
               }}
             >
               <Entypo name="grid" size={35} color="white" />
@@ -109,12 +132,12 @@ export default function MainScreenProfileTabScreen({
         </View>
         {showFirstDiv && (
           <View style={styles.firstView}>
-            <Text>Hello</Text>
+            <ColumnCards />
           </View>
         )}
         {showSecondDiv && (
           <View style={styles.secondView}>
-            <Text>Hello Again</Text>
+            <GridCards />
           </View>
         )}
       </ScrollView>
@@ -127,7 +150,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "flex-start",
     justifyContent: "flex-start",
-    paddingTop: 20,
   },
   img: {
     width: 60,
@@ -146,6 +168,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 20,
     paddingRight: 40,
+    paddingTop: 20,
   },
   profileName: {
     flexDirection: "row",
@@ -165,6 +188,8 @@ const styles = StyleSheet.create({
   badgeView: {
     flexDirection: "row",
     gap: 1,
+    width: "64%",
+    overflow: "hidden",
   },
   friends: {
     flexDirection: "column",
@@ -219,11 +244,13 @@ const styles = StyleSheet.create({
     borderBottomColor: "#c5c5c5",
   },
   firstView: {
-    height: 20,
+    height: "100%",
     marginTop: 30,
+    paddingHorizontal: 20,
   },
   secondView: {
-    height: 20,
+    height: "100%",
     marginTop: 30,
+    paddingHorizontal: 1,
   },
 });

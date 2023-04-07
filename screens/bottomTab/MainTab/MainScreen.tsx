@@ -85,7 +85,7 @@ export default function MainScreenMainTabScreen({
             <Text style={styles.linkText}>Discovery</Text>
           </TouchableOpacity>
         </View>
-        <Text>There are no posts on this user</Text>
+        <Text style={styles.margin}>There are no posts on this user</Text>
       </SafeAreaView>
     );
   }
@@ -174,6 +174,11 @@ const styles = StyleSheet.create({
     borderColor: "#fff",
     marginBottom: 10,
     backgroundColor: "transparent",
+  },
+  margin: {
+    marginTop: 50,
+    fontSize: 17,
+    fontWeight: "bold",
   },
   buttons: {
     width: "100%",
