@@ -1,19 +1,25 @@
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity } from "react-native";
 
-import { Text, View } from '../../../components/components/themed';
-import { MainStackScreenProps } from '../../../types';
+import { Text, View } from "../../../components/components/themed";
+import { MainStackScreenProps } from "../../../types";
 
-export default function DiscoveryScreenMainTabScreen({ navigation }: MainStackScreenProps<'DiscoveryScreen'>) {
-
+export default function DiscoveryScreenMainTabScreen({
+  navigation,
+}: MainStackScreenProps<"DiscoveryScreen">) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>This is the Discovery screen of Main tab</Text>
       <TouchableOpacity onPress={() => navigation.goBack()} style={styles.link}>
         <Text style={styles.linkText}>Go to main screen!</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate("Root", {
-        screen: "Profile"
-      })} style={styles.link}>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate("Root", {
+            screen: "Profile",
+          })
+        }
+        style={styles.link}
+      >
         <Text style={styles.linkText}>Go to profile tab!</Text>
       </TouchableOpacity>
     </View>
@@ -23,13 +29,13 @@ export default function DiscoveryScreenMainTabScreen({ navigation }: MainStackSc
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     padding: 20,
   },
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   link: {
     marginTop: 15,
@@ -37,6 +43,6 @@ const styles = StyleSheet.create({
   },
   linkText: {
     fontSize: 14,
-    color: '#2e78b7',
+    color: "#2e78b7",
   },
 });

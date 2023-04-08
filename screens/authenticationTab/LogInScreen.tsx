@@ -39,11 +39,15 @@ export default function LogInScreen({
             source={require("../../assets/splash.png")}
             style={styles.image}
           />
+          <View style={styles.welcomeText}>
+            <Text style={styles.textOne}>Welcome</Text>
+            <Text style={styles.textTwo}>Good to see you again!</Text>
+          </View>
           <View style={styles.login_filed}>
             <TextInput
               style={styles.input}
-              placeholder="Email"
-              placeholderTextColor="#fff"
+              placeholder="Username"
+              placeholderTextColor="#DCDCDC"
               autoCapitalize="none"
               keyboardType="email-address"
               value={username}
@@ -52,7 +56,7 @@ export default function LogInScreen({
             <TextInput
               style={styles.input}
               placeholder="Password"
-              placeholderTextColor="#fff"
+              placeholderTextColor="#DCDCDC"
               secureTextEntry
               value={password}
               onChangeText={setPassword}
@@ -66,6 +70,9 @@ export default function LogInScreen({
               </TouchableOpacity>
             </View>
 
+            <TouchableOpacity style={styles.button} onPress={handleSignIn}>
+              <Text style={styles.buttonText}>Login</Text>
+            </TouchableOpacity>
             <View style={styles.fix}>
               <Text style={styles.textColor}>You dont have an Account?</Text>
               <TouchableOpacity
@@ -75,19 +82,20 @@ export default function LogInScreen({
                 <Text style={styles.linkText}>Sign Up!</Text>
               </TouchableOpacity>
             </View>
-            <TouchableOpacity style={styles.button} onPress={handleSignIn}>
-              <Text style={styles.buttonText}>Login</Text>
-            </TouchableOpacity>
           </View>
           <View style={styles.LogInForms}>
-            <Text style={styles.textLogIn}>
-              Log In with Facebook{" "}
-              <Feather name="facebook" size={28} color="blue" />
-            </Text>
-            <Text style={styles.textLogIn}>
-              Log In with Google{"    "}
-              <AntDesign name="google" size={28} color="red" />
-            </Text>
+            <TouchableOpacity style={styles.auth}>
+              <Text style={styles.textLogIn}>
+                <Feather name="facebook" size={28} color="blue" /> Log In with
+                Facebook
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.auth}>
+              <Text style={styles.textLogIn}>
+                <AntDesign name="google" size={28} color="red" /> {"  "}Log In
+                with Google
+              </Text>
+            </TouchableOpacity>
           </View>
         </KeyboardAvoidingView>
       </ScrollView>
@@ -100,7 +108,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#050816",
+    backgroundColor: "#151515",
   },
   contain: {
     width: "100%",
@@ -112,8 +120,24 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "auto",
   },
+  welcomeText: {
+    marginTop: -50,
+    textAlign: "center",
+    fontWeight: "bold",
+    backgroundColor: "transparent",
+    paddingBottom: 20,
+  },
+  textOne: {
+    fontSize: 30,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  textTwo: {
+    fontSize: 17,
+    textAlign: "center",
+  },
   image: {
-    marginTop: 30,
+    marginTop: 10,
     width: 200,
     height: 200,
     resizeMode: "cover",
@@ -121,7 +145,7 @@ const styles = StyleSheet.create({
   login_filed: {
     width: "70%",
     height: "auto",
-    marginTop: -30,
+    marginTop: 0,
     padding: 10,
     alignItems: "flex-end",
     justifyContent: "center",
@@ -133,7 +157,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 5,
     marginBottom: 15,
-    borderColor: "#fff",
+    borderColor: "#7a7a7a",
     color: "#fff",
   },
   textColor: {
@@ -153,7 +177,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     paddingVertical: 15,
     borderRadius: 5,
-    marginTop: 20,
+    marginTop: 5,
+    width: "100%",
   },
   buttonText: {
     color: "white",
@@ -181,16 +206,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   textLogIn: {
-    width: "85%",
+    width: "100%",
     fontWeight: "bold",
     textAlign: "center",
     fontSize: 19,
     paddingHorizontal: 30,
     paddingVertical: 10,
-    color: "#eee",
+    color: "#DCDCDC",
     backgroundColor: "transparent",
-    borderRadius: 25,
+    borderRadius: 11,
     borderWidth: 2,
-    borderColor: "#fff",
+    borderColor: "#7a7a7a",
+  },
+  auth: {
+    width: "80%",
   },
 });

@@ -93,6 +93,12 @@ export default function RegisterScreen({
             source={require("../../assets/splash.png")}
             style={styles.image}
           />
+          <View style={styles.welcomeText}>
+            <Text style={styles.textOne}>Create your account</Text>
+            <Text style={styles.textTwo}>
+              Sign up and enjoy your experience with strangers
+            </Text>
+          </View>
           <View style={styles.login_filed}>
             {errors.username && (
               <Text style={styles.error}>{errors.username}</Text>
@@ -100,7 +106,7 @@ export default function RegisterScreen({
             <TextInput
               style={styles.input}
               placeholder="Username"
-              placeholderTextColor="#fff"
+              placeholderTextColor="#DCDCDC"
               autoCapitalize="none"
               keyboardType="default"
               value={username}
@@ -110,7 +116,7 @@ export default function RegisterScreen({
             <TextInput
               style={styles.input}
               placeholder="Email"
-              placeholderTextColor="#fff"
+              placeholderTextColor="#DCDCDC"
               autoCapitalize="none"
               keyboardType="email-address"
               value={email}
@@ -122,7 +128,7 @@ export default function RegisterScreen({
             <TextInput
               style={styles.input}
               placeholder="Password"
-              placeholderTextColor="#fff"
+              placeholderTextColor="#DCDCDC"
               secureTextEntry
               value={password}
               onChangeText={setPassword}
@@ -133,7 +139,7 @@ export default function RegisterScreen({
             <TextInput
               style={styles.input}
               placeholder="Confirm Password"
-              placeholderTextColor="#fff"
+              placeholderTextColor="#DCDCDC"
               secureTextEntry
               value={confirmPass}
               onChangeText={setConfirmPass}
@@ -157,15 +163,18 @@ export default function RegisterScreen({
             </TouchableOpacity>
           </View>
           <View style={styles.LogInForms}>
-            <Text style={styles.textLogIn}>
-              Sign Up with Facebook{" "}
-              <Feather name="facebook" size={28} color="blue" />
-            </Text>
-
-            <Text style={styles.textLogIn}>
-              Sign Up with Google{"    "}
-              <AntDesign name="google" size={28} color="red" />
-            </Text>
+            <TouchableOpacity style={styles.auth}>
+              <Text style={styles.textLogIn}>
+                <Feather name="facebook" size={28} color="blue" /> Log In with
+                Facebook
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.auth}>
+              <Text style={styles.textLogIn}>
+                <AntDesign name="google" size={28} color="red" /> {"  "}Log In
+                with Google
+              </Text>
+            </TouchableOpacity>
           </View>
         </KeyboardAvoidingView>
       </ScrollView>
@@ -178,7 +187,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#050816",
+    backgroundColor: "#151515",
   },
   contain: {
     width: "100%",
@@ -191,7 +200,6 @@ const styles = StyleSheet.create({
     height: "auto",
   },
   image: {
-    marginTop: 10,
     width: 200,
     height: 200,
     resizeMode: "cover",
@@ -211,7 +219,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 5,
     marginBottom: 15,
-    borderColor: "#fff",
+    borderColor: "#7a7a7a",
     color: "#fff",
   },
   textColor: {
@@ -231,7 +239,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     paddingVertical: 15,
     borderRadius: 5,
-    marginTop: 20,
+    marginTop: 5,
+    width: "100%",
   },
   buttonText: {
     color: "white",
@@ -257,23 +266,45 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
+    paddingBottom: 40,
   },
   textLogIn: {
-    width: "85%",
+    width: "100%",
     fontWeight: "bold",
     textAlign: "center",
     fontSize: 19,
     paddingHorizontal: 30,
     paddingVertical: 10,
-    color: "#eee",
+    color: "#DCDCDC",
     backgroundColor: "transparent",
-    borderRadius: 25,
+    borderRadius: 11,
     borderWidth: 2,
-    borderColor: "#fff",
+    borderColor: "#7a7a7a",
+  },
+  auth: {
+    width: "80%",
   },
   error: {
     color: "#ff0000",
     fontSize: 12,
     marginBottom: 10,
+  },
+  welcomeText: {
+    marginTop: -50,
+    textAlign: "center",
+    fontWeight: "bold",
+    backgroundColor: "transparent",
+    paddingBottom: 50,
+  },
+  textOne: {
+    fontSize: 30,
+    fontWeight: "bold",
+    textAlign: "center",
+    color: "#dcdcdc",
+  },
+  textTwo: {
+    fontSize: 17,
+    textAlign: "center",
+    color: "#dcdcdc",
   },
 });
