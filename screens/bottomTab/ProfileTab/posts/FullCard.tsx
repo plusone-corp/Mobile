@@ -1,7 +1,12 @@
 import { View, Text } from "../../../../components/components/themed";
 import { Image } from "expo-image";
-import { StyleSheet, TouchableOpacity, ScrollView } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  TextInput,
+  KeyboardAvoidingView,
+} from "react-native";
 
 interface Skill {
   name: string;
@@ -21,90 +26,98 @@ const skills: Skill[] = [
 export default function ColumnCards() {
   return (
     <ScrollView style={styles.container}>
-      <View>
-        {skills.map((skill) => (
-          <View style={styles.cardsContainer} key={skill.name}>
-            <View style={styles.partyImage}>
-              <Image
-                style={styles.Img}
-                source={{
-                  uri: skill.img,
-                }}
-              />
-              <View style={styles.ButtonsDir}>
-                <TouchableOpacity style={styles.buttonsParty}>
-                  <Text>❤️</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.buttonsParty}>
-                  <Text>😍</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.buttonsParty}>
-                  <Text>😂</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-            <View style={styles.align}>
-              <View style={styles.partyInfo}>
-                <View style={styles.dir}>
-                  <Image
-                    style={styles.Imge}
-                    source={{
-                      uri: skill.img,
-                    }}
-                  />
-                  <Text style={styles.partyName}>{skill.name}</Text>
-                </View>
-                <Text style={styles.partyTitle}>{skill.title}</Text>
-                <Text style={styles.partyDescription}>{skill.description}</Text>
-              </View>
-              <View style={styles.moreInfo}>
-                <Text style={styles.partyTime}>12:99 PM</Text>
-                <Text style={styles.partyDate}>03/22/23</Text>
-                <TouchableOpacity
-                  style={{
-                    alignSelf: "flex-end",
-                    paddingTop: 20,
-                  }}
-                >
-                  <Text>
-                    <Ionicons name="ios-chatbox" size={25} color="black" />
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        ))}
-      </View>
-      <View style={styles.comments}>
+      <KeyboardAvoidingView>
         <View>
-          <Text>Comments</Text>
-          <Text>34</Text>
-        </View>
-      </View>
-      <View>
-        {skills.map((skill) => (
-          <View key={skill.name}>
-            <Image
-              source={{
-                uri: skill.img,
-              }}
-            />
-            <View>
-              <Text>{skill.description}</Text>
-              <View>
-                <View>
-                  <Text>Like</Text>
-                  <Text>Like</Text>
-                  <Text>Like</Text>
+          {skills.map((skill) => (
+            <View style={styles.cardsContainer} key={skill.name}>
+              <View style={styles.partyImage}>
+                <Image
+                  style={styles.Img}
+                  source={{
+                    uri: skill.img,
+                  }}
+                />
+                <View style={styles.ButtonsDir}>
+                  <TouchableOpacity style={styles.buttonsParty}>
+                    <Text>❤️</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.buttonsParty}>
+                    <Text>😍</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.buttonsParty}>
+                    <Text>😂</Text>
+                  </TouchableOpacity>
                 </View>
-                <View>
-                  <Text>Created at: 12/02/23</Text>
+              </View>
+              <View style={styles.align}>
+                <View style={styles.partyInfo}>
+                  <View style={styles.dir}>
+                    <Image
+                      style={styles.Imge}
+                      source={{
+                        uri: skill.img,
+                      }}
+                    />
+                    <Text style={styles.partyName}>{skill.name}</Text>
+                  </View>
+                  <Text style={styles.partyTitle}>{skill.title}</Text>
+                  <Text style={styles.partyDescription}>
+                    {skill.description}
+                  </Text>
+                </View>
+                <View style={styles.moreInfo}>
+                  <Text style={styles.partyTime}>12:99 PM</Text>
+                  <Text style={styles.partyDate}>03/22/23</Text>
                 </View>
               </View>
             </View>
+          ))}
+          <View>
+            <View style={styles.commentsHead}>
+              <Text style={styles.Text}>34</Text>
+              <Text style={styles.Text}>Comments</Text>
+            </View>
+            <View style={styles.leaveComment}>
+              <TextInput
+                placeholder="Leave a comment"
+                placeholderTextColor="#525252"
+                style={styles.commentField}
+              />
+              <TouchableOpacity>
+                <Text style={styles.postBtn}>⬆️</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        ))}
-      </View>
+
+          <View style={{ paddingBottom: 30, backgroundColor: "#fff" }}>
+            {skills.map((skill) => (
+              <View key={skill.name} style={styles.comment}>
+                <Image
+                  source={{
+                    uri: skill.img,
+                  }}
+                  style={styles.Imge}
+                />
+                <View style={styles.commented}>
+                  <Text style={styles.descText}>{skill.description}</Text>
+                  <View>
+                    <View style={styles.commentButtons}>
+                      <Text style={styles.commentsbtn}>2d</Text>
+
+                      <TouchableOpacity>
+                        <Text style={styles.commentsbtn}>❤️ 1</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity>
+                        <Text style={styles.commentsbtn}>Reply</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            ))}
+          </View>
+        </View>
+      </KeyboardAvoidingView>
     </ScrollView>
   );
 }
@@ -240,9 +253,78 @@ const styles = StyleSheet.create({
     textAlign: "right",
     fontWeight: "500",
   },
-  comments: {
+  commentsHead: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    paddingHorizontal: 30,
+    alignItems: "center",
     backgroundColor: "#fff",
+    borderBottomColor: "#000",
+    borderBottomWidth: 2,
+    gap: 10,
+  },
+  Text: {
     color: "#000",
-    paddingTop: 100,
+    fontSize: 25,
+    fontWeight: "bold",
+    paddingVertical: 20,
+  },
+  comment: {
+    backgroundColor: "#fff",
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
+    paddingTop: 30,
+    paddingLeft: 10,
+  },
+  commented: {
+    width: "80%",
+    marginLeft: 7,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 20,
+    borderTopLeftRadius: 0,
+    backgroundColor: "#d7d7d7",
+  },
+  descText: {
+    color: "#151515",
+    fontSize: 14,
+    fontWeight: "400",
+    paddingVertical: 10,
+  },
+  commentButtons: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    gap: 20,
+    backgroundColor: "#d7d7d7",
+  },
+  commentsbtn: {
+    color: "#525252",
+    padding: 4,
+    paddingHorizontal: 10,
+  },
+  leaveComment: {
+    flexDirection: "row",
+    width: "100%",
+    padding: 10,
+    paddingHorizontal: 15,
+    backgroundColor: "#fff",
+    gap: 10,
+  },
+  commentField: {
+    backgroundColor: "#d7d7d7",
+    width: "82%",
+    borderRadius: 10,
+    padding: 10,
+    fontSize: 15,
+  },
+  postBtn: {
+    padding: 20,
+    backgroundColor: "#fff",
+    color: "#fff",
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#7a7a7a",
   },
 });

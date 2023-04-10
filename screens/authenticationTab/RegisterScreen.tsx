@@ -20,17 +20,20 @@ export default function RegisterScreen({
   const { signUp } = useContext(AuthContext);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
+  const [age, setAge] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
   interface Errors {
     username: string;
     email: string;
+    age: number | string;
     password: string;
     confirmPass: string;
   }
   const [errors, setErrors] = useState<Errors>({
     username: "",
     email: "",
+    age: "",
     password: "",
     confirmPass: "",
   });
@@ -38,8 +41,9 @@ export default function RegisterScreen({
   const validateForm = () => {
     let newErrors: Errors = {
       email: "",
-      password: "",
       username: "",
+      age: "",
+      password: "",
       confirmPass: "",
     };
     let check = true;
@@ -64,6 +68,11 @@ export default function RegisterScreen({
       check = false;
       newErrors.password = "The password should be at least 8 characters long";
     }
+    if (parseInt(age) < 18) {
+      check = false;
+      newErrors.age = "You must be at least 19 years old";
+    }
+
     setErrors(newErrors);
     return check;
   };
@@ -73,6 +82,7 @@ export default function RegisterScreen({
         const data = {
           username,
           email,
+          age,
           password,
           navigate: navigation.navigate,
         };
@@ -121,6 +131,16 @@ export default function RegisterScreen({
               keyboardType="email-address"
               value={email}
               onChangeText={setEmail}
+            />
+            {errors.age && <Text style={styles.error}>{errors.age}</Text>}
+            <TextInput
+              style={styles.input}
+              placeholder="Age"
+              placeholderTextColor="#DCDCDC"
+              autoCapitalize="none"
+              keyboardType="numeric"
+              value={age}
+              onChangeText={setAge}
             />
             {errors.password && (
               <Text style={styles.error}>{errors.password}</Text>
