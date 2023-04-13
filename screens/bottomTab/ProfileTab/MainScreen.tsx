@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StyleSheet, Image, TouchableOpacity, ScrollView } from "react-native";
 import ColumnCards from "./posts/ColumnCards";
 import GridCards from "./posts/GridCards";
-
+import * as SecureStore from "expo-secure-store";
 import { Text, View } from "../../../components/components/themed";
 import { ProfileStackScreenProps } from "../../../types";
 import { Entypo } from "@expo/vector-icons";
+import { User } from "../../../types/app";
 
 interface Badge {
   id: string;
@@ -27,6 +28,7 @@ export default function MainScreenProfileTabScreen({
 }: ProfileStackScreenProps<"MainScreen">) {
   const icon = require("../../../assets/icon.png");
 
+  const [user, setUser] = useState<User>()
   const [inviteText, setInviteText] = useState("Invite +");
   const [friendText, setFriendText] = useState("Add Friend");
 
@@ -51,6 +53,18 @@ export default function MainScreenProfileTabScreen({
     setShowSecondDiv(true);
   };
 
+  useEffect(() => {
+    async function getUser() {
+      const storedUser = await SecureStore.getItemAsync("user")
+      setUser(JSON.parse(storedUser ?? "{}") ?? null);
+    }
+    if(!user) getUser()
+  })
+
+  console.log(user)
+
+  if(!user) return null
+
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scroll}>
@@ -58,7 +72,7 @@ export default function MainScreenProfileTabScreen({
           <View style={styles.profileName}>
             <Image source={icon} style={styles.img} />
             <View style={styles.BadgeName}>
-              <Text style={styles.displayname}>displayname</Text>
+              <Text style={styles.displayname}>{user.displayName}</Text>
               <View style={styles.badgeView}>
                 {badges.map((badge) => (
                   <Image
@@ -73,14 +87,14 @@ export default function MainScreenProfileTabScreen({
             </View>
           </View>
           <View style={styles.friends}>
-            <Text style={styles.fontChange}>100</Text>
+            <Text style={styles.fontChange}>{user.friends.length}</Text>
             <Text style={styles.fontChange}>Friends</Text>
           </View>
         </View>
 
         <View style={styles.UserInfo}>
           <Text style={styles.Info}>Location: England</Text>
-          <Text style={styles.Info}>Age: 19</Text>
+          <Text style={styles.Info}>Age: {user.age}</Text>
           <Text style={styles.Info}>
             Hi im Bes and im here to have some fun if someone has a party i'll
             be the right to invite
@@ -132,7 +146,9 @@ export default function MainScreenProfileTabScreen({
         </View>
         {showFirstDiv && (
           <View style={styles.firstView}>
-            <ColumnCards />
+            {
+              user.events.map((key: any, eventID: any) => <ColumnCards eventID={eventID} key={key} />)
+            }
           </View>
         )}
         {showSecondDiv && (

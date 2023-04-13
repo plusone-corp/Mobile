@@ -21,7 +21,10 @@ const skills: Skill[] = [
     img: "https://cdn.discordapp.com/attachments/979617962728226826/1093945331214987314/image.png",
   },
 ];
-export default function ColumnCards() {
+export default function ColumnCards({ eventID }: { eventID: string }) {
+
+  console.log(eventID)
+
   return (
     <ScrollView style={styles.container}>
       <View>

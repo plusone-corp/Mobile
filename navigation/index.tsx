@@ -139,16 +139,16 @@ function RootNavigator() {
             throw new Error("Invalid username or password");
           }
 
-          const token = await response.json();
+          const data = await response.json();
 
-          await SecureStore.setItemAsync("token", token.token.accessToken);
+          await SecureStore.setItemAsync("token", data.token.accessToken);
           await SecureStore.setItemAsync(
             "refreshToken",
-            token.token.refreshToken
+            data.token.refreshToken
           );
-          await SecureStore.setItemAsync("user", JSON.stringify(token.user));
+          await SecureStore.setItemAsync("user", JSON.stringify(data.user));
 
-          dispatch({ type: "SIGN_IN", token });
+          dispatch({ type: "SIGN_IN", token: data });
         } catch (error) {
           console.error(error);
           throw error;
