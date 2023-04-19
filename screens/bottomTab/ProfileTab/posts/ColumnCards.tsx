@@ -22,8 +22,7 @@ const skills: Skill[] = [
   },
 ];
 export default function ColumnCards({ eventID }: { eventID: string }) {
-
-  console.log(eventID)
+  console.log(eventID);
 
   return (
     <ScrollView style={styles.container}>
@@ -64,7 +63,7 @@ export default function ColumnCards({ eventID }: { eventID: string }) {
                 <Text style={styles.partyDescription}>{skill.description}</Text>
               </View>
               <View style={styles.moreInfo}>
-                <Text style={styles.partyTime}>12:99 PM</Text>
+                <Text style={styles.partyTime}></Text>
                 <Text style={styles.partyDate}>03/22/23</Text>
                 <TouchableOpacity
                   style={{

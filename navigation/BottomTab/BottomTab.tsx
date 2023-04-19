@@ -25,7 +25,9 @@ export default function BottomTabNavigator() {
         options={({ navigation }: RootTabScreenProps<"Main">) => ({
           title: "Home",
           tabBarActiveTintColor: colors[colorScheme ?? "light"].tint,
-          tabBarIcon: ({ color }) => <Icon name="home" size={30} color={color}/>
+          tabBarIcon: ({ color }) => (
+            <Icon name="home" size={30} color={color} />
+          ),
         })}
       />
       <BottomTab.Screen
@@ -34,7 +36,9 @@ export default function BottomTabNavigator() {
         options={({ navigation }: RootTabScreenProps<"Profile">) => ({
           title: "Me",
           tabBarActiveTintColor: colors[colorScheme ?? "light"].tint,
-          tabBarIcon: ({ color }) => <Icon name="user" size={30} color={color}/>
+          tabBarIcon: ({ color }) => (
+            <Icon name="user" size={30} color={color} />
+          ),
         })}
       />
     </BottomTab.Navigator>

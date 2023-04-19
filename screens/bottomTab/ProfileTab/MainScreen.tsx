@@ -28,7 +28,7 @@ export default function MainScreenProfileTabScreen({
 }: ProfileStackScreenProps<"MainScreen">) {
   const icon = require("../../../assets/icon.png");
 
-  const [user, setUser] = useState<User>()
+  const [user, setUser] = useState<User>();
   const [inviteText, setInviteText] = useState("Invite +");
   const [friendText, setFriendText] = useState("Add Friend");
 
@@ -55,15 +55,15 @@ export default function MainScreenProfileTabScreen({
 
   useEffect(() => {
     async function getUser() {
-      const storedUser = await SecureStore.getItemAsync("user")
+      const storedUser = await SecureStore.getItemAsync("user");
       setUser(JSON.parse(storedUser ?? "{}") ?? null);
     }
-    if(!user) getUser()
-  })
+    if (!user) getUser();
+  });
 
-  console.log(user)
+  console.log(user);
 
-  if(!user) return null
+  if (!user) return null;
 
   return (
     <View style={styles.container}>
@@ -93,8 +93,8 @@ export default function MainScreenProfileTabScreen({
         </View>
 
         <View style={styles.UserInfo}>
-          <Text style={styles.Info}>Location: England</Text>
-          <Text style={styles.Info}>Age: {user.age}</Text>
+          <Text style={styles.Info}>📍 England</Text>
+          <Text style={styles.Info}>🎂 {user.age}</Text>
           <Text style={styles.Info}>
             Hi im Bes and im here to have some fun if someone has a party i'll
             be the right to invite
@@ -146,9 +146,9 @@ export default function MainScreenProfileTabScreen({
         </View>
         {showFirstDiv && (
           <View style={styles.firstView}>
-            {
-              user.events.map((key: any, eventID: any) => <ColumnCards eventID={eventID} key={key} />)
-            }
+            {user.events.map((key: any, eventID: any) => (
+              <ColumnCards eventID={eventID} key={key} />
+            ))}
           </View>
         )}
         {showSecondDiv && (
